@@ -1,13 +1,11 @@
-type categoryType = {
-  creationAt: string;
-  id: number;
-  image: string;
-  name: string;
-  updatedAt: string;
-};
-
 export type ProductType = {
-  category: categoryType[];
+  category: {
+    creationAt: string;
+    id: number;
+    image: string;
+    name: string;
+    updatedAt: string;
+  };
   creationAt: string;
   description: string;
   id: number;
@@ -15,4 +13,12 @@ export type ProductType = {
   price: number;
   title: string;
   updatedAt: string;
+};
+
+export type FilterObjectType = {
+  title: string;
+  price: string;
+  min: string;
+  max: string;
+  id: string;
 };
