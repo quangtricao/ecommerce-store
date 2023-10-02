@@ -1,4 +1,4 @@
-export type ProductType = {
+export type ProductObject = {
   category: {
     creationAt: string;
     id: number;
@@ -15,10 +15,18 @@ export type ProductType = {
   updatedAt: string;
 };
 
-export type FilterObjectType = {
+export type FilterObject = {
   title: string;
   price: string;
   min: string;
   max: string;
   id: string;
+};
+
+export type CategoryObject = {
+  id: number;
+  name: string;
+  image: string;
+  creationAt: string;
+  updatedAt: string;
 };

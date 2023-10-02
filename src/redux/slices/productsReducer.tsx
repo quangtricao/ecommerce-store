@@ -1,10 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getAll } from "../../api/products";
-import { ProductType, FilterObjectType } from "../../types/Products";
+import { getProduct } from "../../api/products";
+import { ProductObject, FilterObject } from "../../types/Products";
+
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async (obj?: FilterObject) => {
+    const response = await getProduct(obj?.title, obj?.price, obj?.min, obj?.max, obj?.id);
+    return response;
+  }
+);
 
 const initialState: {
-  products: ProductType[];
+  products: ProductObject[];
   error?: string | null;
   loading: boolean;
 } = {
@@ -13,27 +21,35 @@ const initialState: {
 };
 
 const productsSlice = createSlice({
-  name: "blog",
+  name: "products",
   initialState,
-  reducers: {
-    initialize(state, action) {
-      return { ...state, products: action.payload };
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      if (!(typeof action.payload === "string")) {
+        return {
+          ...state,
+          loading: false,
+          products: action.payload,
+        };
+      }
+    });
+    builder.addCase(fetchProducts.rejected, (state, action) => {
+      if (typeof action.payload === "string") {
+        return {
+          ...state,
+          loading: false,
+          error: action.payload,
+        };
+      }
+    });
+    builder.addCase(fetchProducts.pending, (state, action) => {
+      return {
+        ...state,
+        loading: true,
+      };
+    });
   },
 });
 
-export const fetchProducts = (obj?: FilterObjectType) => {
-  return async (dispatch: (arg0: { payload: any; type: "blog/initialize" }) => void) => {
-    try {
-      const response = await getAll(obj?.title, obj?.price, obj?.min, obj?.max, obj?.id);
-      dispatch(initialize(response));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-};
-
-// console.log(productsSlice);
-
-export const { initialize } = productsSlice.actions;
 export default productsSlice.reducer;
