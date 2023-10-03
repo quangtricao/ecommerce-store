@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 
-import { Box, Grid, Slider } from "@mui/material";
+import { Box, Button, FormControl, Grid, Slider } from "@mui/material";
 
 import { fetchProducts } from "../redux/slices/productsReducer";
 import { fetchCategories } from "../redux/slices/categoriesReducer";
 import { ProductObject } from "../types/Products";
 
-import ProductListPreview from "../components/ProductListPreview";
+import ProductPreview from "../components/ProductPreview";
 
 const Products = () => {
   const dispatch = useAppDispatch();
-  const products = useAppSelector((state) => state.productsReducer);
-  const categories = useAppSelector((state) => state.categoriesReducer);
+  const productsReducer = useAppSelector((state) => state.productsReducer);
+  const categoriesReducer = useAppSelector((state) => state.categoriesReducer);
 
   const [filterObject, setFilterObject] = useState({
     title: "",
@@ -44,8 +44,8 @@ const Products = () => {
 
   return (
     <div>
-      <form action="">
-        <div className="nameFilter">
+      <FormControl sx={{ width: 500 }}>
+        <Box>
           Filter by name:{" "}
           <input
             name="name filter"
@@ -54,8 +54,8 @@ const Products = () => {
             value={filterObject.title}
             onChange={({ target }) => setFilterObject({ ...filterObject, title: target.value })}
           />
-        </div>
-        <div className="category">
+        </Box>
+        <Box>
           Category:
           <select
             name="category"
@@ -64,14 +64,14 @@ const Products = () => {
             onChange={({ target }) => setFilterObject({ ...filterObject, id: target.value })}
           >
             <option value="">All</option>
-            {categories.categories.map((item) => (
+            {categoriesReducer.categories.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.name}
               </option>
             ))}
           </select>
-        </div>
-        <Box sx={{ width: 500 }}>
+        </Box>
+        <Box sx={{ width: "100%" }}>
           Price range: {value[0]} - {value[1]}
           <Slider
             getAriaLabel={() => "Temperature range"}
@@ -83,15 +83,15 @@ const Products = () => {
             max={1000}
           />
         </Box>
-        <button type="button" onClick={submitFilter}>
+        <Button variant="outlined" size="small" onClick={submitFilter} sx={{ width: "50%" }}>
           Filter
-        </button>
-      </form>
+        </Button>
+      </FormControl>
 
       <div style={{ maxWidth: "80%", margin: "50px auto" }}>
         <Grid container alignItems="stretch" spacing={2} columns={5}>
-          {products.products.map((product: ProductObject) => (
-            <ProductListPreview product={product} key={product.id} />
+          {productsReducer.products.map((product: ProductObject) => (
+            <ProductPreview product={product} key={product.id} />
           ))}
         </Grid>
       </div>

@@ -7,10 +7,10 @@ type ProductListPreviewProps = {
   product: ProductObject;
 };
 
-const ProductListPreview = ({ product }: ProductListPreviewProps) => {
+const ProductPreview = ({ product }: ProductListPreviewProps) => {
   return (
     <Grid component="article" item xs={1}>
-      <Link to={`/brewery/${product.id.toString()}`} style={{ textDecoration: "none" }}>
+      <Link to={`/products/${product.id.toString()}`} style={{ textDecoration: "none" }}>
         <Card
           variant="outlined"
           sx={{
@@ -51,4 +51,4 @@ const ProductListPreview = ({ product }: ProductListPreviewProps) => {
   );
 };
 
-export default ProductListPreview;
+export default ProductPreview;
