@@ -7,6 +7,10 @@ import Products from "../pages/Products";
 import Profile from "../pages/Profile";
 import ErrorPage from "../pages/ErrorPage";
 
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import ProtectedRoute from "../components/ProtectedRoute";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -23,13 +27,27 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/cart",
         element: <Cart />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    errorElement: <ErrorPage />,
   },
 ]);
 

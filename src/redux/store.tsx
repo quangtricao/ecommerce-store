@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import productsReducer from "./slices/productsReducer";
 import categoriesReducer from "./slices/categoriesReducer";
 import cartsReducer from "./slices/cartsReducer";
+import userReducer from "./slices/userReducer";
 
 const store = configureStore({
   reducer: {
     productsReducer,
     categoriesReducer,
     cartsReducer,
+    userReducer,
   },
 });
 

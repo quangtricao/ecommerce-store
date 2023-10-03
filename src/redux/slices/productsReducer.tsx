@@ -5,7 +5,7 @@ import { ProductObject, FilterObject } from "../../types/Products";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (obj?: FilterObject) => {
+  async (obj?: FilterObject): Promise<string | ProductObject[]> => {
     const response = await getProduct(obj?.title, obj?.price, obj?.min, obj?.max, obj?.id);
     return response;
   }
