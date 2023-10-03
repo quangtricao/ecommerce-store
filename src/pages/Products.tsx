@@ -6,6 +6,7 @@ import { Box, Grid, Slider } from "@mui/material";
 import { fetchProducts } from "../redux/slices/productsReducer";
 import { fetchCategories } from "../redux/slices/categoriesReducer";
 import { ProductObject } from "../types/Products";
+
 import ProductListPreview from "../components/ProductListPreview";
 
 const Products = () => {
