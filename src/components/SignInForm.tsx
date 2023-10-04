@@ -8,7 +8,7 @@ type SignInFormProps = {
 
 const SignInForm = ({ handleSubmit, setSignIn }: SignInFormProps) => {
   const [email, setEmail] = useState("");
-  const emailRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/);
+  const emailRegex = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/);
 
   return (
     <Container component="main" maxWidth="xs">

@@ -9,7 +9,7 @@ type SignUpFormProps = {
 const SignUpFom = ({ handleSubmit, setSignIn }: SignUpFormProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const emailRegex = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/);
+  const emailRegex = new RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/);
   const passwordRegex = new RegExp(/^(?=.*[!@#$%^&*.])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/);
 
   return (
