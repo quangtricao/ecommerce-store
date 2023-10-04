@@ -5,7 +5,11 @@ import { Box, Button, FormControl, Grid, Slider } from "@mui/material";
 
 import { fetchProducts } from "../redux/slices/productsReducer";
 import { fetchCategories } from "../redux/slices/categoriesReducer";
+import { addUser } from "../redux/slices/userReducer";
+
 import { ProductObject } from "../types/Products";
+import { getTokenFromLocalStorage } from "../api/token";
+import { getLoginUserInfo } from "../api/user";
 
 import ProductPreview from "../components/ProductPreview";
 
@@ -33,8 +37,19 @@ const Products = () => {
   };
 
   useEffect(() => {
+    const token = getTokenFromLocalStorage();
+
     dispatch(fetchProducts({ title: "", price: "", min: "", max: "", id: "" }));
     dispatch(fetchCategories());
+
+    if (typeof token === "string") {
+      getLoginUserInfo(token).then((response) => {
+        if (typeof response === "object") {
+          dispatch(addUser(response));
+        }
+      });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

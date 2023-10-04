@@ -1,18 +1,17 @@
 import { Navigate } from "react-router-dom";
-
-import { getTokenFromLocalStorage, getLoginUserInfo } from "../api/user";
+import { useAppSelector } from "../redux/hook";
 
 type ProtectedRouteProp = {
   children: JSX.Element;
 };
 
 const ProtectedRoute = ({ children }: ProtectedRouteProp) => {
-  const token = getTokenFromLocalStorage();
-  if (!token) {
+  const user = useAppSelector((state) => state.userReducer);
+
+  if (!user.authorizedUser) {
     return <Navigate to="/login" />;
   }
-  getLoginUserInfo(token).then((res) => console.log(res));
-
+  
   return children;
 };
 

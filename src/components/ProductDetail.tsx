@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { ProductObject } from "../types/Products";
 
 type ProductDetailProps = {
@@ -6,10 +7,13 @@ type ProductDetailProps = {
 
 const ProductDetail = ({ product }: ProductDetailProps) => {
   return (
-    <div>
-      {product?.title}
-      <div>{product?.description}</div>
-    </div>
+    <Box>
+      <Typography variant="h1" sx={{ fontSize: 30, fontWeight: "bold", mb: 2 }}>
+        {product?.title}
+      </Typography>
+      <div>Creation at: {product?.creationAt}</div>
+      <div>Description: {product?.description}</div>
+    </Box>
   );
 };
 

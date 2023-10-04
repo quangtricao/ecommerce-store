@@ -1,35 +1,84 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { login } from "../api/user";
+import SignInForm from "../components/SignInForm";
+import SignUpFom from "../components/SignUpForm";
+import { login, getLoginUserInfo, signup } from "../api/user";
+import { saveTokenToLocalStorage, getTokenFromLocalStorage } from "../api/token";
+import { addUser } from "../redux/slices/userReducer";
+import { useAppDispatch } from "../redux/hook";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    login({ email, password });
+  const [signIn, setSignIn] = useState(true);
+  const token = getTokenFromLocalStorage();
+
+  // Verify the token. If true, the server return the user object
+  useEffect(() => {
+    if (typeof token === "string") {
+      getLoginUserInfo(token).then((response) => {
+        if (typeof response === "object") {
+          navigate("/");
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const response = await login({
+      email: String(data.get("email")),
+      password: String(data.get("password")),
+    });
+
+    if (typeof response === "object") {
+      const authorizedUser = await getLoginUserInfo(response.access_token);
+      if (typeof authorizedUser === "object") {
+        dispatch(addUser(authorizedUser));
+        saveTokenToLocalStorage(response.access_token);
+        navigate("/");
+      }
+    } else {
+      // Error handling
+      console.log(response);
+    }
   };
 
+  const handleSubmitRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const response = await signup({
+      name: String(data.get("fullName")),
+      email: String(data.get("email")),
+      password: String(data.get("password")),
+      avatar: String(data.get("avatar")),
+    });
+
+    if (typeof response === "object") {
+      // Dispatch successful noti
+      setSignIn(true);
+    } else {
+      // Error handling
+      console.log(response);
+    }
+  };
+
+  if (token) {
+    return null;
+  }
+
   return (
-    <div>
-      <form action="">
-        <div>
-          Username:
-          <input type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
-        </div>
-        <div>
-          Password:
-          <input
-            type="text"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button type="button" onClick={handleLogin}>
-          Submit
-        </button>
-      </form>
-    </div>
+    <>
+      {signIn ? (
+        <SignInForm handleSubmit={handleSubmitLogin} setSignIn={setSignIn} />
+      ) : (
+        <SignUpFom handleSubmit={handleSubmitRegister} setSignIn={setSignIn} />
+      )}
+    </>
   );
 };
 
