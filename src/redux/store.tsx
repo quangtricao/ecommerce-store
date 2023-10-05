@@ -5,14 +5,17 @@ import categoriesReducer from "./slices/categoriesReducer";
 import cartsReducer from "./slices/cartsReducer";
 import userReducer from "./slices/userReducer";
 
-const store = configureStore({
-  reducer: {
-    productsReducer,
-    categoriesReducer,
-    cartsReducer,
-    userReducer,
-  },
-});
+export const createStore = () => {
+  return configureStore({
+    reducer: {
+      productsReducer,
+      categoriesReducer,
+      cartsReducer,
+      userReducer,
+    },
+  });
+};
+const store = createStore();
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

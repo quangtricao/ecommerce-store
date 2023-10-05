@@ -1,8 +1,8 @@
-// import { render, screen, waitFor } from "@testing-library/react"
-// import { Provider } from "react-redux"
-// import store from "../shared/store"
-// import App from "../../App"
-// import appRender from "./appRender"
+import { render, screen, waitFor } from "@testing-library/react"
+import { Provider } from "react-redux"
+import store from "../../redux/store"
+import App from "../../App"
+import appRender from "./appRender"
 // import userServer from "../servers/userServer"
 
 // beforeAll(() => userServer.listen())
