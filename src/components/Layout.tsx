@@ -5,13 +5,11 @@ import Header from "./Header";
 
 const Layout: React.FC = () => {
   return (
-    <div>
-      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-        <Header />
-        <Outlet />
-        <Footer />
-      </Box>
-    </div>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <Header />
+      <Outlet />
+      <Footer />
+    </Box>
   );
 };
 

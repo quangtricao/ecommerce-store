@@ -4,9 +4,13 @@ import { AppBar, Box, Button } from "@mui/material/";
 
 const pages = [
   { name: "Home", link: "/" },
-  { name: "Profile", link: "/profile" },
-  { name: "Cart Page", link: "/cart" },
+  { name: "Contact us", link: "/contact" },
 ];
+
+const user = [
+  { name: "My account", link: "/profile" },
+  { name: "Baseket", link: "/category"}
+]
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +18,11 @@ const Header: React.FC = () => {
 
   return (
     <AppBar position="sticky">
-      <Box sx={{ marginLeft: "10%", display: { xs: "none", md: "flex" } }}>
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex", justifyContent: "space-between" },
+        }}
+      >
         {pages.map((page) => (
           <Button
             key={page.name}
@@ -28,6 +36,7 @@ const Header: React.FC = () => {
             {page.name}
           </Button>
         ))}
+        <Button onClick={() => navigate("/profile")}>Profile</Button>
       </Box>
     </AppBar>
   );

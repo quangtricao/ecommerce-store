@@ -1,4 +1,4 @@
-const STORAGE_KEY = "authorizedUser";
+const STORAGE_KEY = "authorizedToken";
 
 export const saveTokenToLocalStorage = (token: string) => {
   window.localStorage.setItem(STORAGE_KEY, token);

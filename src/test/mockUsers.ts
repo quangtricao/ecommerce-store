@@ -1,0 +1,32 @@
+export const MockUser = [
+  {
+    id: 1,
+    email: "john@mail.com",
+    password: "changeme",
+    name: "Jhon",
+    role: "customer",
+    avatar: "https://i.imgur.com/5iNAL9T.jpeg",
+    creationAt: "2023-10-06T18:41:34.000Z",
+    updatedAt: "2023-10-06T18:41:34.000Z",
+  },
+  {
+    id: 2,
+    email: "maria@mail.com",
+    password: "12345",
+    name: "Maria",
+    role: "customer",
+    avatar: "https://i.imgur.com/O1LUkwy.jpeg",
+    creationAt: "2023-10-06T18:41:34.000Z",
+    updatedAt: "2023-10-06T18:41:34.000Z",
+  },
+  {
+    id: 3,
+    email: "admin@mail.com",
+    password: "admin123",
+    name: "Admin",
+    role: "admin",
+    avatar: "https://i.imgur.com/uDpzwEk.jpeg",
+    creationAt: "2023-10-06T18:41:34.000Z",
+    updatedAt: "2023-10-06T18:41:34.000Z",
+  },
+];

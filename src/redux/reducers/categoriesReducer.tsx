@@ -1,12 +1,25 @@
+import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { CategoryObject } from "../../types/Products";
-import { getCategory } from "../../api/products";
 
-export const fetchCategories = createAsyncThunk("categories/fetchCategories", async () => {
-  const response = await getCategory();
-  return response;
-});
+export const getCategory = createAsyncThunk(
+  "categories/getCategory",
+  async (): Promise<CategoryObject[] | string> => {
+    try {
+      const response = await axios.get("https://api.escuelajs.co/api/v1/categories");
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
 
 const initialState: {
   categories: CategoryObject[];
@@ -22,7 +35,7 @@ const categoriesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+    builder.addCase(getCategory.fulfilled, (state, action) => {
       if (!(typeof action.payload === "string")) {
         return {
           ...state,
@@ -31,7 +44,7 @@ const categoriesSlice = createSlice({
         };
       }
     });
-    builder.addCase(fetchCategories.rejected, (state, action) => {
+    builder.addCase(getCategory.rejected, (state, action) => {
       if (typeof action.payload === "string") {
         return {
           ...state,
@@ -40,7 +53,7 @@ const categoriesSlice = createSlice({
         };
       }
     });
-    builder.addCase(fetchCategories.pending, (state, action) => {
+    builder.addCase(getCategory.pending, (state, action) => {
       return {
         ...state,
         loading: true,
