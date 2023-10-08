@@ -27,7 +27,7 @@ const Intro = () => {
             sequi perferendis fuga dolor unde, vel repudiandae. Lorem ipsum dolor sit amet
           </p>
         </Box>
-        <img src={Logo} alt="FIN-FS16" style={{ width: "30%" }} />
+        <img src={Logo} alt="FIN-FS16" style={{ width: "30%", borderRadius: "30px" }} />
       </Box>
     </Box>
   );
