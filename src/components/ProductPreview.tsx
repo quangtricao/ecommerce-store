@@ -12,21 +12,23 @@ const ProductPreview = ({ product }: ProductListPreviewProps) => {
     <Grid component="article" item xs={1}>
       <Link to={`/products/${product.id.toString()}`} style={{ textDecoration: "none" }}>
         <Card
-          variant="outlined"
+          variant="elevation"
           sx={{
+            minHeight: "350px",
             transition: "1s",
             "&:hover": {
               borderColor: "primary.main",
             },
           }}
         >
+          <img src={product.images[0]} alt={`${product.title}`} style={{ width: "100%" }} />
           <CardContent>
             <Box component="div">
               <Typography
                 variant="body2"
                 component="strong"
                 sx={{
-                  fontSize: 16,
+                  fontSize: 15,
                   textDecoration: "none",
                   fontWeight: "bold",
                 }}
@@ -34,15 +36,11 @@ const ProductPreview = ({ product }: ProductListPreviewProps) => {
                 {product.title}
               </Typography>
             </Box>
-            <Typography variant="body2" component="div" sx={{ fontSize: 12 }}>
-              {product.description}
-            </Typography>
-            <br />
-            <Typography component="div" sx={{ fontSize: 12 }}>
+            <Typography component="div" sx={{ fontSize: 15 }}>
               Category: {product.category.name}
             </Typography>
-            <Typography component="div" sx={{ fontSize: 12 }}>
-              Price: {product.price}
+            <Typography component="div" sx={{ fontSize: 20, fontWeight: "bold" }}>
+              $ {product.price}
             </Typography>
           </CardContent>
         </Card>

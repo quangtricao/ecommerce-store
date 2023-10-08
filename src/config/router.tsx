@@ -3,10 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/Layout";
 import Cart from "../pages/Cart";
 import Product from "../pages/Product";
-import Products from "../pages/Products";
+import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import ErrorPage from "../pages/ErrorPage";
-
+import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -18,7 +18,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Products />,
+        element: <Home />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/products/:id",

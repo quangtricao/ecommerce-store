@@ -8,8 +8,9 @@ import { getCategory } from "../redux/reducers/categoriesReducer";
 import { ProductObject } from "../types/Products";
 import ProductPreview from "../components/ProductPreview";
 import Filter from "../components/Filter";
+import Intro from "../components/Intro";
 
-const Products = () => {
+const Home = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.productsReducer.products);
 
@@ -21,6 +22,7 @@ const Products = () => {
 
   return (
     <div style={{ maxWidth: "60%", margin: "50px auto" }}>
+      <Intro />
       <Filter />
       <Grid container alignItems="stretch" spacing={2} columns={5} sx={{ marginTop: "50px" }}>
         {products.map((product: ProductObject) => (
@@ -31,4 +33,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Home;

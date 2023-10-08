@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Box, Button, FormControl, Slider } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+  TextField,
+} from "@mui/material";
 
 import { FilterObject } from "../types/Products";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
@@ -31,35 +40,53 @@ const Filter = () => {
   };
 
   return (
-    <FormControl sx={{ width: 500 }}>
-      <Box>
-        Filter by name:{" "}
-        <input
-          name="name filter"
-          id="nameFilter"
-          type="text"
-          value={filterObject.title}
-          onChange={({ target }) => setFilterObject({ ...filterObject, title: target.value })}
-        />
-      </Box>
-      <Box>
-        Category:
-        <select
-          name="category"
-          id="category"
-          style={{ marginLeft: "10px", width: "100px" }}
-          onChange={({ target }) => setFilterObject({ ...filterObject, id: target.value })}
-        >
-          <option value="">All</option>
-          {categories.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
-      </Box>
+    <FormControl sx={{ width: "100%", display: "flex", flexDirection: "column", gap: "15px" }}>
+      <Box sx={{ fontSize: "25px" }}>Filter</Box>
+      <TextField
+        id="titleFilter"
+        label="Product title"
+        variant="outlined"
+        value={filterObject.title}
+        onChange={({ target }) => setFilterObject({ ...filterObject, title: target.value })}
+        sx={{ width: "50%" }}
+      />
+      <TextField
+        id="priceFilter"
+        label="Product price"
+        variant="outlined"
+        value={filterObject.price}
+        onChange={({ target }) => setFilterObject({ ...filterObject, price: target.value })}
+        sx={{ width: "50%" }}
+      />
       <Box sx={{ width: "100%" }}>
-        Price range: {value[0]} - {value[1]}
+        Category:
+        <Select
+          labelId="category"
+          id="category"
+          onChange={({ target }) => setFilterObject({ ...filterObject, id: target.value })}
+          value={filterObject.id}
+          sx={{ width: "100%", marginTop: "5px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {categories.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box sx={{ width: "250px", marginRight: "20px" }}>
+          Price range: {value[0]} - {value[1]}
+        </Box>
         <Slider
           getAriaLabel={() => "Temperature range"}
           value={value}
@@ -70,7 +97,7 @@ const Filter = () => {
           max={1000}
         />
       </Box>
-      <Button variant="outlined" size="small" onClick={submitFilter} sx={{ width: "50%" }}>
+      <Button variant="contained" size="small" onClick={submitFilter} sx={{ width: "100%" }}>
         Filter
       </Button>
     </FormControl>

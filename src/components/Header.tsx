@@ -1,43 +1,77 @@
-import { useNavigate } from "react-router-dom";
-
-import { AppBar, Box, Button } from "@mui/material/";
+import { styled } from "@mui/material/styles";
+import { AppBar, Container, Link, Box, Button, Tooltip } from "@mui/material";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 const pages = [
   { name: "Home", link: "/" },
-  { name: "Contact us", link: "/contact" },
+  { name: "Contact", link: "/contact" },
 ];
 
-const user = [
-  { name: "My account", link: "/profile" },
-  { name: "Baseket", link: "/category"}
-]
+const settings = [
+  { name: "Profile", link: "/profile", element: <AccountCircleOutlinedIcon /> },
+  { name: "Cart", link: "/cart", element: <ShoppingCartOutlinedIcon /> },
+];
 
-const Header: React.FC = () => {
-  const navigate = useNavigate();
+const ActiveLink = styled(Button)({
+  fontSize: "20px",
+  fontWeight: "bold",
+  ":hover": {
+    backgroundColor: "white",
+  },
+});
+
+const InactiveLink = styled(Button)({
+  color: "black",
+  fontSize: "20px",
+  fontWeight: "bold",
+  ":hover": {
+    color: "#1769aa",
+    transition: "0.4s",
+    backgroundColor: "white",
+  },
+});
+
+const Header = () => {
   let url = window.location.pathname;
 
   return (
-    <AppBar position="sticky">
-      <Box
+    <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
+      <Container
         sx={{
-          display: { xs: "none", md: "flex", justifyContent: "space-between" },
+          maxWidth: "60%",
+          marginX: "auto",
+          paddingY: "10px",
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        {pages.map((page) => (
-          <Button
-            key={page.name}
-            onClick={() => navigate(page.link)}
-            sx={{
-              my: "20px",
-              fontWeight: "800",
-              color: `${url === page.link ? "#f07f7f" : "white"}`,
-            }}
-          >
-            {page.name}
-          </Button>
-        ))}
-        <Button onClick={() => navigate("/profile")}>Profile</Button>
-      </Box>
+        <Box sx={{ display: "flex" }}>
+          {pages.map((page) => (
+            <Link href={page.link} key={page.name}>
+              {url === page.link ? (
+                <ActiveLink>{page.name}</ActiveLink>
+              ) : (
+                <InactiveLink>{page.name}</InactiveLink>
+              )}
+            </Link>
+          ))}
+        </Box>
+
+        <Box>
+          {settings.map((setting) => (
+            <Tooltip title={setting.name} key={setting.name}>
+              <Link href={setting.link}>
+                {url === setting.link ? (
+                  <ActiveLink>{setting.element}</ActiveLink>
+                ) : (
+                  <InactiveLink>{setting.element}</InactiveLink>
+                )}
+              </Link>
+            </Tooltip>
+          ))}
+        </Box>
+      </Container>
     </AppBar>
   );
 };
