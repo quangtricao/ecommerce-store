@@ -1,17 +1,10 @@
+import { Link, useLocation } from "react-router-dom";
+
 import { styled } from "@mui/material/styles";
-import { AppBar, Container, Link, Box, Button, Tooltip } from "@mui/material";
+import { Badge, Box, Button, Tooltip } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-
-const pages = [
-  { name: "Home", link: "/" },
-  { name: "Contact", link: "/contact" },
-];
-
-const settings = [
-  { name: "Profile", link: "/profile", element: <AccountCircleOutlinedIcon /> },
-  { name: "Cart", link: "/cart", element: <ShoppingCartOutlinedIcon /> },
-];
+import { useAppSelector } from "../redux/hook";
 
 const ActiveLink = styled(Button)({
   fontSize: "20px",
@@ -33,46 +26,61 @@ const InactiveLink = styled(Button)({
 });
 
 const Header = () => {
-  let url = window.location.pathname;
+  let url = useLocation().pathname;
+  const productsInCart = useAppSelector((state) => state.cartsReducer);
+
+  const pages = [
+    { name: "Home", link: "/" },
+    { name: "Contact", link: "/contact" },
+  ];
+
+  const settings = [
+    { name: "Profile", link: "/profile", element: <AccountCircleOutlinedIcon /> },
+    {
+      name: "Cart",
+      link: "/cart",
+      element: (
+        <Badge badgeContent={productsInCart.length} color="primary">
+          <ShoppingCartOutlinedIcon />
+        </Badge>
+      ),
+    },
+  ];
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
-      <Container
-        sx={{
-          maxWidth: "60%",
-          marginX: "auto",
-          paddingY: "10px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box sx={{ display: "flex" }}>
-          {pages.map((page) => (
-            <Link href={page.link} key={page.name}>
-              {url === page.link ? (
-                <ActiveLink>{page.name}</ActiveLink>
+    <Box
+      component="header"
+      sx={{
+        paddingY: "10px",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box sx={{ display: "flex" }}>
+        {pages.map((page) => (
+          <Link to={page.link} key={page.name}>
+            {url === page.link ? (
+              <ActiveLink>{page.name}</ActiveLink>
+            ) : (
+              <InactiveLink>{page.name}</InactiveLink>
+            )}
+          </Link>
+        ))}
+      </Box>
+      <Box>
+        {settings.map((setting) => (
+          <Tooltip title={setting.name} key={setting.name}>
+            <Link to={setting.link}>
+              {url === setting.link ? (
+                <ActiveLink>{setting.element}</ActiveLink>
               ) : (
-                <InactiveLink>{page.name}</InactiveLink>
+                <InactiveLink>{setting.element}</InactiveLink>
               )}
             </Link>
-          ))}
-        </Box>
-
-        <Box>
-          {settings.map((setting) => (
-            <Tooltip title={setting.name} key={setting.name}>
-              <Link href={setting.link}>
-                {url === setting.link ? (
-                  <ActiveLink>{setting.element}</ActiveLink>
-                ) : (
-                  <InactiveLink>{setting.element}</InactiveLink>
-                )}
-              </Link>
-            </Tooltip>
-          ))}
-        </Box>
-      </Container>
-    </AppBar>
+          </Tooltip>
+        ))}
+      </Box>
+    </Box>
   );
 };
 

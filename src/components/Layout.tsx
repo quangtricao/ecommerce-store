@@ -5,7 +5,16 @@ import Header from "./Header";
 
 const Layout: React.FC = () => {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "50px",
+        minHeight: "100vh",
+        maxWidth: "80%",
+        marginX: "auto",
+      }}
+    >
       <Header />
       <Outlet />
       <Footer />

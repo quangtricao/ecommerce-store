@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 
-import { Grid } from "@mui/material";
+import { Box, Grid, Pagination, Stack } from "@mui/material";
 
 import { getAllProduct } from "../redux/reducers/productsReducer";
 import { getCategory } from "../redux/reducers/categoriesReducer";
@@ -13,6 +13,7 @@ import Intro from "../components/Intro";
 const Home = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.productsReducer.products);
+  const pages = Math.ceil(products.length / 15);
 
   useEffect(() => {
     dispatch(getAllProduct());
@@ -21,15 +22,18 @@ const Home = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: "60%", margin: "50px auto" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <Intro />
-      <Filter />
+      <Filter products={products}/>
       <Grid container alignItems="stretch" spacing={2} columns={5} sx={{ marginTop: "50px" }}>
         {products.map((product: ProductObject) => (
           <ProductPreview product={product} key={product.id} />
         ))}
       </Grid>
-    </div>
+      <Stack spacing={2} sx={{ width: "50%", margin: "50px auto" }}>
+        <Pagination count={pages} showFirstButton showLastButton />
+      </Stack>
+    </Box>
   );
 };
 
