@@ -3,7 +3,7 @@ import { useAppDispatch } from "../redux/hook";
 
 import SignInForm from "../components/SignInForm";
 import SignUpFom from "../components/SignUpForm";
-import { login, register } from "../redux/reducers/userReducer";
+import { addUser, getLoginUserInfo, login, register } from "../redux/reducers/userReducer";
 import { saveTokenToLocalStorage } from "../api/token";
 import { useNavigate } from "react-router-dom";
 
@@ -15,21 +15,21 @@ const Login = () => {
   const handleSubmitLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    dispatch(
+    const response = await dispatch(
       login({
         email: String(data.get("email")),
         password: String(data.get("password")),
       })
-    )
-      .unwrap()
-      .then((response) => {
-        if (typeof response === "object") {
-          saveTokenToLocalStorage(response.access_token);
-          navigate("/profile");
-        } else {
-          console.log(response);
-        }
-      });
+    ).unwrap();
+
+    if (typeof response === "object") {
+      saveTokenToLocalStorage(response.access_token);
+      const user = await dispatch(getLoginUserInfo(response.access_token));
+      dispatch(addUser(user));
+      navigate("/profile");
+    } else {
+      console.log(response);
+    }
   };
 
   const handleSubmitRegister = async (event: React.FormEvent<HTMLFormElement>) => {

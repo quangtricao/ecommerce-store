@@ -1,46 +1,44 @@
 import { Link } from "react-router-dom";
-import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import CheckIcon from "@mui/icons-material/Check";
+import { Card, CardContent, Grid, Typography } from "@mui/material";
 
 import { ProductObject } from "../types/Products";
-import { addToCart } from "../redux/reducers/cartsReducer";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 type ProductListPreviewProps = {
   product: ProductObject;
+  children?: JSX.Element;
 };
-
-const ProductPreview = ({ product }: ProductListPreviewProps) => {
-  const dispatch = useAppDispatch();
-  const cartsReducer = useAppSelector((state) => state.cartsReducer);
-  const idInCart = cartsReducer.map((product) => String(product.productInCart.id));
-
+// scale(1.08)
+const ProductPreview = ({ product, children }: ProductListPreviewProps) => {
   return (
     <Grid item xs={1}>
       <Card
         sx={{
+          padding: "15px",
+          backgroundColor: "#d7eafa",
+          borderRadius: "20px",
+
           "&:hover": {
             transition: "0.5s",
-            transform: "scale(1.2)",
+            transform: "translateY(-25px)",
           },
         }}
       >
         <img
           src={product.images[0]}
           alt={`${product.title}`}
-          style={{ width: "100%", minHeight: "300px" }}
+          style={{ width: "100%", borderRadius: "20px" }}
         />
 
-        <CardContent>
+        <CardContent sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <Link to={`/products/${product.id.toString()}`} style={{ textDecoration: "none" }}>
             <Typography
               sx={{
                 color: "#1769aa",
-                fontSize: 15,
+                fontSize: 18,
                 fontWeight: "bold",
                 ":hover": {
-                  color: "#f2749c",
+                  transition: "0.3s",
+                  color: "red",
                 },
               }}
             >
@@ -50,25 +48,13 @@ const ProductPreview = ({ product }: ProductListPreviewProps) => {
           <Typography component="div" sx={{ fontSize: 15 }}>
             Category: {product.category.name}
           </Typography>
+          <Typography component="div" sx={{ fontSize: 15 }}>
+            {`${product.description.slice(0, 100)} ...`}
+          </Typography>
           <Typography component="div" sx={{ fontSize: 20, fontWeight: "bold" }}>
             $ {product.price}
           </Typography>
-
-          {idInCart.includes(String(product.id)) ? (
-            <Button variant="contained" startIcon={<CheckIcon />} disabled>
-              Already in cart
-            </Button>
-          ) : (
-            <Button
-              variant="outlined"
-              startIcon={<AddShoppingCartIcon />}
-              onClick={() => {
-                dispatch(addToCart(product));
-              }}
-            >
-              Add to cart
-            </Button>
-          )}
+          {children}
         </CardContent>
       </Card>
     </Grid>

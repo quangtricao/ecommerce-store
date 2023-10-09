@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "../components/Layout";
 import Cart from "../pages/Cart";
-import Product from "../pages/Product";
+import ProductDetail from "../components/ProductDetail";
 import Home from "../pages/Home";
 import Profile from "../pages/Profile";
 import ErrorPage from "../pages/ErrorPage";
-import Contact from "../pages/Contact";
+import SellProduct from "../pages/SellProduct";
 import Login from "../pages/Login";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -21,12 +21,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/contact",
-        element: <Contact />,
+        path: "/sell",
+        element: <SellProduct />,
       },
       {
         path: "/products/:id",
-        element: <Product />,
+        element: <ProductDetail />,
       },
       {
         path: "/profile",
@@ -40,12 +40,11 @@ const router = createBrowserRouter([
         path: "/cart",
         element: <Cart />,
       },
+      {
+        path: "/login",
+        element: <Login />,
+      },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <ErrorPage />,
   },
 ]);
 

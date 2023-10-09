@@ -3,30 +3,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ProductObject, FilterObject } from "../../types/Products";
 
-/*
-https://api.escuelajs.co/api/v1/products?offset=0&limit=10
-
-/products?offset=0&limit=10     Return the first 10 products.
-/products?offset=10&limit=10	  Return products from 10 to 20
-/products?offset=20&limit=10	  Return products from 20 to 30
-
-/products?offset=0&limit=20	    Return the first 20 products.
-/products?offset=20&limit=20	  Return products from 20 to 40
-/products?offset=40&limit=20	  Return products from 40 to 60
-
-
-https://api.escuelajs.co/api/v1/products?title=G&offset=10&limit=10
-*/
-
 export const getAllProduct = createAsyncThunk(
-  "products/getAllProducts",
+  "products/getAllProduct",
   async (obj: FilterObject | undefined): Promise<ProductObject[] | string> => {
     try {
       const response = await axios.get(
-        `https://api.escuelajs.co/api/v1/products/?title=${obj?.title ? obj?.title : ""}&price=${
-          obj?.price ? obj?.price : ""
-        }&price_min=${obj?.min ? obj?.min : ""}&price_max=${obj?.max ? obj?.max : ""}&categoryId=${
-          obj?.id ? obj?.id : ""
+        `https://api.escuelajs.co/api/v1/products/?title=${obj?.title ? obj.title : ""}&price=${
+          obj?.price ? obj.price : ""
+        }&price_min=${obj?.min ? obj.min : ""}&price_max=${obj?.max ? obj.max : ""}&categoryId=${
+          obj?.id ? obj.id : ""
         }`
       );
       return response.data;
@@ -54,14 +39,7 @@ const initialState: {
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {
-    replace(state, action) {
-      return {
-        ...state,
-        products: action.payload,
-      };
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllProduct.fulfilled, (state, action) => {
       if (!(typeof action.payload === "string")) {
@@ -90,5 +68,4 @@ const productsSlice = createSlice({
   },
 });
 
-export const { replace } = productsSlice.actions;
 export default productsSlice.reducer;

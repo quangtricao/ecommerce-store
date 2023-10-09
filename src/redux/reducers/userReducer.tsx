@@ -65,16 +65,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     addUser(state, action) {
-      return {
-        loading: false,
-        authorizedUser: action.payload,
-      };
+      state.authorizedUser = action.payload;
     },
-    removeUser(state, action) {
-      return {
-        loading: false,
-        authorizedUser: null,
-      };
+    removeUser(state) {
+      state.authorizedUser = null;
     },
   },
 });

@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-
 import { styled } from "@mui/material/styles";
 import { Badge, Box, Button, Tooltip } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+
 import { useAppSelector } from "../redux/hook";
 
 const ActiveLink = styled(Button)({
@@ -31,7 +31,7 @@ const Header = () => {
 
   const pages = [
     { name: "Home", link: "/" },
-    { name: "Contact", link: "/contact" },
+    { name: "Sell", link: "/sell" },
   ];
 
   const settings = [
@@ -51,12 +51,12 @@ const Header = () => {
     <Box
       component="header"
       sx={{
-        paddingY: "10px",
+        paddingY: "20px",
         display: "flex",
         justifyContent: "space-between",
       }}
     >
-      <Box sx={{ display: "flex" }}>
+      <Box>
         {pages.map((page) => (
           <Link to={page.link} key={page.name}>
             {url === page.link ? (
