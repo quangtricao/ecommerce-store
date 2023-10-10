@@ -4,10 +4,9 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CheckIcon from "@mui/icons-material/Check";
 
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { getAllProduct } from "../redux/reducers/productsReducer";
 import { getCategory } from "../redux/reducers/categoriesReducer";
 import { addToCart } from "../redux/reducers/cartsReducer";
-import { FilterObject, ProductObject } from "../types/Products";
+import { FilterPagination, ProductObject } from "../types/Products";
 
 import Intro from "../components/Intro";
 import Filter from "../components/Filter";
@@ -16,7 +15,9 @@ import ProductPreview from "../components/ProductPreview";
 import axios from "axios";
 import EditModal from "../components/EditModal";
 import { getTokenFromLocalStorage } from "../api/token";
+import { fetchAllByFilter } from "../api/products";
 import { addUser, getLoginUserInfo } from "../redux/reducers/userReducer";
+import { getAllProduct } from "../redux/reducers/productsReducer";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -24,28 +25,29 @@ const Home = () => {
   const cartsReducer = useAppSelector((state) => state.cartsReducer);
   const user = useAppSelector((state) => state.userReducer.authorizedUser);
 
-  const pages = Math.ceil(products.length / 16);
-  const idInCart = cartsReducer.map((cart) => String(cart.productInCart.id));
-
+  const [totalPages, setTotalPages] = useState(0);
   const [refetch, setRefetch] = useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [displayProduct, setDisplayProduct] = useState<ProductObject[] | null>(null);
-  const [filterObject, setFilterObject] = useState<FilterObject>({
+  const [filterObject, setFilterObject] = useState<FilterPagination>({
     title: "",
-    price: "",
     min: "",
     max: "",
     id: "",
+    offset: 1,
   });
+  const idInCart = cartsReducer.map((cart) => String(cart.productInCart.id));
 
+  // Refetch products by page
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    dispatch(getAllProduct({ ...filterObject, offset: value }));
   };
 
+  // After filter, return to page 1
   const submitFilter = () => {
     setPage(1);
-    dispatch(getAllProduct(filterObject));
     setRefetch(!refetch);
+    dispatch(getAllProduct(filterObject));
   };
 
   const handleDeleteProduct = (id: number) => {
@@ -61,26 +63,18 @@ const Home = () => {
     }
   };
 
+  // Set the number of page after click Button Filter
   useEffect(() => {
-    axios
-      .get(
-        `https://api.escuelajs.co/api/v1/products/?title=${
-          filterObject.title ? filterObject.title : ""
-        }&price=${filterObject.price ? filterObject.price : ""}&price_min=${
-          filterObject.min ? filterObject.min : ""
-        }&price_max=${filterObject.max ? filterObject.max : ""}&categoryId=${
-          filterObject.id ? filterObject.id : ""
-        }&offset=${(page - 1) * 12}&limit=12`
-      )
-      .then((response) => {
-        setDisplayProduct(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchAllByFilter({
+      title: filterObject.title,
+      min: filterObject.min,
+      max: filterObject.max,
+      id: filterObject.id,
+    }).then((response) => setTotalPages(Math.ceil(response.length / 12)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch, page]);
+  }, [refetch]);
 
+  // Set the number of page initially
   useEffect(() => {
     const token = getTokenFromLocalStorage();
     if (token) {
@@ -89,32 +83,29 @@ const Home = () => {
         .then((response) => {
           if (typeof response === "object") {
             dispatch(addUser(response));
-            dispatch(getAllProduct());
             dispatch(getCategory());
+            dispatch(getAllProduct({ offset: 1 }));
+            fetchAllByFilter({}).then((response) => setTotalPages(Math.ceil(response.length / 12)));
           }
         });
     }
-    dispatch(getAllProduct());
     dispatch(getCategory());
+    dispatch(getAllProduct({ offset: 1 }));
+    fetchAllByFilter({}).then((response) => setTotalPages(Math.ceil(response.length / 12)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (!displayProduct) {
-    return null;
-  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "50px" }}>
       <Intro />
-      <Sort />
       <Filter
         submitFilter={submitFilter}
         setFilterObject={setFilterObject}
         filterObject={filterObject}
       />
-
+      <Sort />
       <Grid container alignItems="stretch" spacing={2} columns={{ sm: 1, md: 2, xl: 3 }}>
-        {displayProduct.map((product: ProductObject) => (
+        {products.map((product: ProductObject) => (
           <ProductPreview product={product} key={product.id}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {idInCart.includes(String(product.id)) ? (
@@ -150,11 +141,10 @@ const Home = () => {
           </ProductPreview>
         ))}
       </Grid>
-
       <Stack spacing={2} sx={{ margin: "0 auto" }}>
         <Pagination
           size="large"
-          count={pages}
+          count={totalPages}
           page={page}
           onChange={handlePageChange}
           showFirstButton

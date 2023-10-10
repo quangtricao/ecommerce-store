@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+
+import { updateProduct } from "../api/products";
 import { ProductObject } from "../types/Products";
-import axios from "axios";
 
 const style = {
   position: "absolute" as "absolute",
@@ -31,14 +32,13 @@ const EditModal = ({ product }: ModalProp) => {
   });
 
   const handleConfirmEdit = () => {
-    axios
-      .put(`https://api.escuelajs.co/api/v1/products/${product.id}`, editproduct)
-      .then(() => {
+    updateProduct(product.id, editproduct).then((response) => {
+      if (typeof response === "object") {
         setOpen(false);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+      } else {
+        alert(response);
+      }
+    });
   };
 
   return (

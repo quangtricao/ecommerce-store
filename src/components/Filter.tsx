@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 
 import { useAppSelector } from "../redux/hook";
-import { FilterObject } from "../types/Products";
+import { FilterPagination } from "../types/Products";
 
 type FilterProps = {
-  filterObject: FilterObject;
+  filterObject: FilterPagination;
   submitFilter: () => void;
-  setFilterObject: (obj: FilterObject) => void;
+  setFilterObject: (obj: FilterPagination) => void;
 };
 
 const Filter = ({ submitFilter, setFilterObject, filterObject }: FilterProps) => {

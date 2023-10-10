@@ -20,21 +20,15 @@ afterAll(() => server.close());
 
 describe("productsReducer asynchronous actions", () => {
   describe("fetch products", () => {
-    test("no filter should return all", async () => {
-      const response = await storeForTest.dispatch(getAllProduct()).unwrap();
-
-      expect(response.length).toBe(mockProducts.length);
-    });
-
     test("filter by title", async () => {
       const response = await storeForTest
         .dispatch(
           getAllProduct({
             title: "1",
-            price: "",
             min: "",
             max: "",
             id: "",
+            offset: 1,
           })
         )
         .unwrap();

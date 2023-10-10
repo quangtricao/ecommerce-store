@@ -16,11 +16,32 @@ export type ProductObject = {
 };
 
 export type FilterObject = {
+  title?: string;
+  min?: string;
+  max?: string;
+  id?: string;
+};
+
+export type FilterPagination = {
+  title?: string;
+  min?: string;
+  max?: string;
+  id?: string;
+  offset: number;
+};
+
+export type EditProduct = {
   title: string;
-  price: string;
-  min: string;
-  max: string;
-  id: string;
+  price: number;
+  description: string;
+};
+
+export type CreateProduct = {
+  title: string;
+  price: number;
+  description: string;
+  categoryId: number;
+  images: string[];
 };
 
 export type CategoryObject = {

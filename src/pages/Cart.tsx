@@ -56,34 +56,45 @@ const CartPage: React.FC = () => {
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         Total items: {productsInCart.length}
-        <Box>
-          <Button>PROCEED TO CHECKOUT</Button>
-          <Button>CLEAR CART</Button>
-        </Box>
+        <Button variant="contained" sx={{ paddingRight: "10px" }}>
+          PROCEED TO CHECKOUT
+        </Button>
       </Box>
 
-      <Box>Total amount: {sum}</Box>
+      <Box>Total amount: $ {sum}</Box>
 
-      <Grid container alignItems="stretch" spacing={2} columns={3} sx={{ marginTop: "10px" }}>
+      <Grid
+        container
+        alignItems="stretch"
+        spacing={2}
+        columns={{ sm: 1, lg: 3 }}
+        sx={{ marginTop: "10px", width: "80%" }}
+      >
         {productsInCart.map((product) => (
           <ProductPreview product={product.productInCart} key={product.productInCart.id}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Box>
                 <Button
                   variant="outlined"
+                  size="small"
                   onClick={() => minusOne(product.number, product.productInCart.id)}
                 >
                   -
                 </Button>
-                <Button variant="outlined" disabled>
+                <Button variant="outlined" size="small" disabled>
                   {product.number}
                 </Button>
-                <Button variant="outlined" onClick={() => plusOne(product.productInCart.id)}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => plusOne(product.productInCart.id)}
+                >
                   +
                 </Button>
               </Box>
               <Button
                 variant="contained"
+                size="small"
                 color="error"
                 onClick={() => remove(product.productInCart.id)}
               >
