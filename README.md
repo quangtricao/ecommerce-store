@@ -9,7 +9,7 @@
 
 Front end of an ecommerce store inspired by the [Platzi Fake Store API](https://fakeapi.platzi.com/).
 
-Here is the deploy (website)[https://quangtricao-fs16-frontend-project.netlify.app/].
+Here is the deploy [website](https://quangtricao-fs16-frontend-project.netlify.app/).
 
 ## Table of contents
 
@@ -62,9 +62,9 @@ The project has a function-based / horizontal slice architecture.
 
 ### Bonus
 
-1. Use context API to switch theme - [ ]
-2. Use pagination when fetching/displaying all the products - [x]
-3. Implement performance optimization where applicable - [ ]
+- [ ]  Use context API to switch theme.
+- [x]  Use pagination when fetching/displaying all the products.
+- [ ]  Implement performance optimization where applicable.
 
 ## Project Structure
 
