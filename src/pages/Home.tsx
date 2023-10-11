@@ -15,9 +15,8 @@ import ProductPreview from "../components/ProductPreview";
 import axios from "axios";
 import EditModal from "../components/EditModal";
 import { getTokenFromLocalStorage } from "../api/token";
-import { fetchAllByFilter } from "../api/products";
 import { addUser, getLoginUserInfo } from "../redux/reducers/userReducer";
-import { getAllProduct } from "../redux/reducers/productsReducer";
+import { getAllProduct, fetchAllByFilter } from "../redux/reducers/productsReducer";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -65,16 +64,20 @@ const Home = () => {
 
   // Set the number of page after click Button Filter
   useEffect(() => {
-    fetchAllByFilter({
-      title: filterObject.title,
-      min: filterObject.min,
-      max: filterObject.max,
-      id: filterObject.id,
-    }).then((response) => setTotalPages(Math.ceil(response.length / 12)));
+    dispatch(
+      fetchAllByFilter({
+        title: filterObject.title,
+        min: filterObject.min,
+        max: filterObject.max,
+        id: filterObject.id,
+      })
+    )
+      .unwrap()
+      .then((response) => setTotalPages(Math.ceil(response.length / 12)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetch]);
 
-  // Set the number of page initially
+  // Initially set the number of page
   useEffect(() => {
     const token = getTokenFromLocalStorage();
     if (token) {
@@ -83,15 +86,14 @@ const Home = () => {
         .then((response) => {
           if (typeof response === "object") {
             dispatch(addUser(response));
-            dispatch(getCategory());
-            dispatch(getAllProduct({ offset: 1 }));
-            fetchAllByFilter({}).then((response) => setTotalPages(Math.ceil(response.length / 12)));
           }
         });
     }
     dispatch(getCategory());
     dispatch(getAllProduct({ offset: 1 }));
-    fetchAllByFilter({}).then((response) => setTotalPages(Math.ceil(response.length / 12)));
+    dispatch(fetchAllByFilter({}))
+      .unwrap()
+      .then((response) => setTotalPages(Math.ceil(response.length / 12)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

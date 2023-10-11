@@ -15,6 +15,11 @@ export type ProductObject = {
   updatedAt: string;
 };
 
+export type ProductInCart = {
+  productInCart: ProductObject;
+  number: number;
+};
+
 export type FilterObject = {
   title?: string;
   min?: string;

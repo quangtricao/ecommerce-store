@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ProductObject } from "../../types/Products";
+import { ProductObject, ProductInCart } from "../../types/Products";
 
-const initialState: {
-  productInCart: ProductObject;
-  number: number;
-}[] = [];
+const initialState: ProductInCart[] = [];
 
 const cartsSlice = createSlice({
   name: "carts",

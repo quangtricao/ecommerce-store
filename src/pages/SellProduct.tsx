@@ -4,7 +4,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } fro
 import Wrapper from "../components/Wrapper";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { getCategory } from "../redux/reducers/categoriesReducer";
-import { createProduct } from "../api/products";
+import { createProduct } from "../redux/reducers/productsReducer";
 
 const SellProduct = () => {
   const dispatch = useAppDispatch();
@@ -22,20 +22,22 @@ const SellProduct = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleUploadProduct = () => {
-    createProduct({
-      ...sellProduct,
-      categoryId: Number(sellProduct.categoryId),
-      price: Number(sellProduct.price),
-      images: [sellProduct.images],
-    }).then((response) => {
-      if (typeof response === "object") {
-        alert("Your product has been uploaded");
-        setSellProduct({ title: "", price: "", description: "", categoryId: "", images: "" });
-      } else {
-        alert(response);
-      }
-    });
+  const handleUploadProduct = async () => {
+    const response = await dispatch(
+      createProduct({
+        ...sellProduct,
+        categoryId: Number(sellProduct.categoryId),
+        price: Number(sellProduct.price),
+        images: [sellProduct.images],
+      })
+    ).unwrap();
+
+    if (typeof response === "object") {
+      alert("Your product has been uploaded");
+      setSellProduct({ title: "", price: "", description: "", categoryId: "", images: "" });
+    } else {
+      alert(response);
+    }
   };
 
   return (

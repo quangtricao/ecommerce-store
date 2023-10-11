@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 
-import { updateProduct } from "../api/products";
+import { updateProduct } from "../redux/reducers/productsReducer";
 import { ProductObject } from "../types/Products";
+import { useAppDispatch } from "../redux/hook";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,9 +22,17 @@ type ModalProp = {
 };
 
 const EditModal = ({ product }: ModalProp) => {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setEditproduct({
+      title: product.title,
+      price: product.price,
+      description: product.description,
+    });
+    setOpen(false);
+  };
 
   const [editproduct, setEditproduct] = useState({
     title: product.title,
@@ -31,14 +40,16 @@ const EditModal = ({ product }: ModalProp) => {
     description: product.description,
   });
 
-  const handleConfirmEdit = () => {
-    updateProduct(product.id, editproduct).then((response) => {
-      if (typeof response === "object") {
-        setOpen(false);
-      } else {
-        alert(response);
-      }
-    });
+  const handleConfirmEdit = async () => {
+    const response = await dispatch(
+      updateProduct({ id: product.id, editedProduct: editproduct })
+    ).unwrap();
+
+    if (typeof response === "object") {
+      setOpen(false);
+    } else {
+      alert(response);
+    }
   };
 
   return (

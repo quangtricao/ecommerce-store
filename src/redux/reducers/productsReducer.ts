@@ -1,7 +1,35 @@
 import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { ProductObject, FilterPagination } from "../../types/Products";
+import {
+  ProductObject,
+  FilterPagination,
+  FilterObject,
+  EditProduct,
+  CreateProduct,
+} from "../../types/Products";
+
+export const fetchAllByFilter = createAsyncThunk(
+  "products/fetchAllByFilter",
+  async (obj: FilterObject): Promise<ProductObject[] | string> => {
+    try {
+      const response = await axios.get(
+        `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
+          obj.min ? obj.min : ""
+        }&price_max=${obj.max ? obj.max : ""}&categoryId=${obj.id ? obj.id : ""}`
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
 
 export const getAllProduct = createAsyncThunk(
   "products/getAllProduct",
@@ -14,6 +42,50 @@ export const getAllProduct = createAsyncThunk(
           (obj.offset - 1) * 12
         }&limit=12`
       );
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
+
+type updateProductProps = {
+  id: number;
+  editedProduct: EditProduct;
+};
+
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ id, editedProduct }: updateProductProps): Promise<ProductObject | string> => {
+    try {
+      const response = await axios.put(
+        `https://api.escuelajs.co/api/v1/products/${id}`,
+        editedProduct
+      );
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
+
+export const createProduct = createAsyncThunk(
+  "products/createProduct",
+  async (obj: CreateProduct): Promise<ProductObject[] | string> => {
+    try {
+      const response = await axios.post("https://api.escuelajs.co/api/v1/products/", obj);
       return response.data;
     } catch (err) {
       const error = err as Error | AxiosError;

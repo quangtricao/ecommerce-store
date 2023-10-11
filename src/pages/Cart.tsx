@@ -22,7 +22,7 @@ const CartPage: React.FC = () => {
   };
 
   const minusOne = (productNumber: number, id: number) => {
-    if (productNumber === 0) {
+    if (productNumber === 1) {
       dispatch(removeFromCart(id));
     }
     dispatch(decreaseQuantity(id));

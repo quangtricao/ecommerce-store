@@ -1,14 +1,14 @@
-const STORAGE_KEY = "authorizedToken";
+const TOKEN_KEY = "authorizedToken";
 
 export const saveTokenToLocalStorage = (token: string) => {
-  window.localStorage.setItem(STORAGE_KEY, token);
+  window.localStorage.setItem(TOKEN_KEY, token);
 };
 
 export const getTokenFromLocalStorage = (): string | null => {
-  const token = window.localStorage.getItem(STORAGE_KEY);
+  const token = window.localStorage.getItem(TOKEN_KEY);
   return token ? token : null;
 };
 
 export const clearTokenFromLocalStorage = () => {
-  window.localStorage.clear();
+  window.localStorage.removeItem(TOKEN_KEY);
 };

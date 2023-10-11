@@ -24,7 +24,7 @@ const Login = () => {
 
     if (typeof response === "object") {
       saveTokenToLocalStorage(response.access_token);
-      const user = await dispatch(getLoginUserInfo(response.access_token));
+      const user = await dispatch(getLoginUserInfo(response.access_token)).unwrap();
       dispatch(addUser(user));
       navigate("/profile");
     } else {
