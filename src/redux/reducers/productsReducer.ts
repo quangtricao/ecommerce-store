@@ -99,6 +99,24 @@ export const createProduct = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id: number): Promise<string> => {
+    try {
+      const response = await axios.delete(`https://api.escuelajs.co/api/v1/products/${id}`);
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
+
 const initialState: {
   products: ProductObject[];
   error?: string | null;

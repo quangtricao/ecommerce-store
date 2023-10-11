@@ -7,6 +7,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import { ProductObject } from "../types/Products";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { deleteProduct } from "../redux/reducers/productsReducer";
 import { addToCart } from "../redux/reducers/cartsReducer";
 import EditModal from "./EditModal";
 
@@ -26,9 +27,15 @@ const ProductDetail = () => {
     });
   });
 
-  const handleDeleteProduct = () => {
+  const handleDeleteProduct = (id: number) => {
     if (window.confirm("Do you really want to delete?")) {
-      axios.delete(`https://api.escuelajs.co/api/v1/products/${id}`).then(() => navigate("/"));
+      const response = dispatch(deleteProduct(id)).unwrap();
+
+      if (typeof response === "string") {
+        alert(response);
+      } else {
+        navigate("/");
+      }
     }
   };
 
@@ -73,7 +80,12 @@ const ProductDetail = () => {
           {user?.role === "admin" ? (
             <Box sx={{ display: "flex", gap: "15px" }}>
               <EditModal product={product} />
-              <Button size="small" variant="contained" color="error" onClick={handleDeleteProduct}>
+              <Button
+                size="small"
+                variant="contained"
+                color="error"
+                onClick={() => handleDeleteProduct(Number(id))}
+              >
                 Delete
               </Button>
             </Box>

@@ -12,11 +12,10 @@ import Intro from "../components/Intro";
 import Filter from "../components/Filter";
 import Sort from "../components/Sort";
 import ProductPreview from "../components/ProductPreview";
-import axios from "axios";
 import EditModal from "../components/EditModal";
 import { getTokenFromLocalStorage } from "../api/token";
 import { addUser, getLoginUserInfo } from "../redux/reducers/userReducer";
-import { getAllProduct, fetchAllByFilter } from "../redux/reducers/productsReducer";
+import { getAllProduct, fetchAllByFilter, deleteProduct } from "../redux/reducers/productsReducer";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -51,14 +50,13 @@ const Home = () => {
 
   const handleDeleteProduct = (id: number) => {
     if (window.confirm("Do you really want to delete?")) {
-      axios
-        .delete(`https://api.escuelajs.co/api/v1/products/${id}`)
-        .then(() => {
-          setRefetch(!refetch);
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+      const response = dispatch(deleteProduct(id)).unwrap();
+
+      if (typeof response === "string") {
+        alert(response);
+      } else {
+        setRefetch(!refetch);
+      }
     }
   };
 
