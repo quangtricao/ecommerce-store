@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 
-import { ProductObject } from "../types/Products";
+import { Product } from "../types/product";
 
 type ProductListPreviewProps = {
-  product: ProductObject;
+  product: Product;
   children?: JSX.Element;
 };
 // scale(1.08)

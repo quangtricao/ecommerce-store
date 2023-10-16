@@ -13,12 +13,12 @@ import {
 } from "@mui/material";
 
 import { useAppSelector } from "../redux/hook";
-import { FilterPagination } from "../types/Products";
+import { FilterProductPagination } from "../types/product";
 
 type FilterProps = {
-  filterObject: FilterPagination;
+  filterObject: FilterProductPagination;
   submitFilter: () => void;
-  setFilterObject: (obj: FilterPagination) => void;
+  setFilterObject: (obj: FilterProductPagination) => void;
 };
 
 const Filter = ({ submitFilter, setFilterObject, filterObject }: FilterProps) => {
@@ -47,7 +47,7 @@ const Filter = ({ submitFilter, setFilterObject, filterObject }: FilterProps) =>
         Filter Product
       </Typography>
 
-      <Grid container spacing={2} columns={{ sm: 1, lg: 5 }}>
+      <Grid container spacing={3} columns={{ sm: 1, lg: 5 }}>
         <Grid item xs={1}>
           <TextField
             id="titleFilter"
@@ -69,8 +69,10 @@ const Filter = ({ submitFilter, setFilterObject, filterObject }: FilterProps) =>
               id="category-select"
               label="Category"
               size="small"
-              onChange={({ target }) => setFilterObject({ ...filterObject, id: target.value })}
-              value={filterObject.id}
+              onChange={({ target }) =>
+                setFilterObject({ ...filterObject, category: target.value })
+              }
+              value={filterObject.category}
               sx={{ width: "100%" }}
             >
               <MenuItem value="">All</MenuItem>
@@ -82,7 +84,28 @@ const Filter = ({ submitFilter, setFilterObject, filterObject }: FilterProps) =>
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={1}>
+          <FormControl fullWidth>
+            <InputLabel id="pagination" size="small">
+              Product per page
+            </InputLabel>
+            <Select
+              labelId="pagination"
+              id="pagination-select"
+              label="pagination"
+              size="small"
+              onChange={({ target }) =>
+                setFilterObject({ ...filterObject, limit: Number(target.value) })
+              }
+              value={filterObject.limit}
+              sx={{ width: "100%" }}
+            >
+              <MenuItem value={6}>6 items</MenuItem>
+              <MenuItem value={12}>12 items</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={2}>
           <Typography>
             Price range: {minmax[0]} - {minmax[1]}
           </Typography>

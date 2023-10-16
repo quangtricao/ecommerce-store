@@ -5,7 +5,7 @@ import { Box, Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-import { ProductObject } from "../types/Products";
+import { Product } from "../types/product";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { deleteProduct } from "../redux/reducers/productsReducer";
 import { addToCart } from "../redux/reducers/cartsReducer";
@@ -19,7 +19,7 @@ const ProductDetail = () => {
   const user = useAppSelector((state) => state.userReducer.authorizedUser);
 
   let { id } = useParams();
-  const [product, setProduct] = useState<ProductObject | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     axios.get(`https://api.escuelajs.co/api/v1/products/${id}`).then((response) => {

@@ -3,7 +3,7 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 import { updateProduct } from "../redux/reducers/productsReducer";
-import { ProductObject } from "../types/Products";
+import { Product } from "../types/product";
 import { useAppDispatch } from "../redux/hook";
 
 const style = {
@@ -18,7 +18,7 @@ const style = {
 };
 
 type ModalProp = {
-  product: ProductObject;
+  product: Product;
 };
 
 const EditModal = ({ product }: ModalProp) => {
@@ -30,6 +30,8 @@ const EditModal = ({ product }: ModalProp) => {
       title: product.title,
       price: product.price,
       description: product.description,
+      images: product.images,
+      categoryId: product.category.id,
     });
     setOpen(false);
   };
@@ -38,11 +40,13 @@ const EditModal = ({ product }: ModalProp) => {
     title: product.title,
     price: product.price,
     description: product.description,
+    images: product.images,
+    categoryId: product.category.id,
   });
 
   const handleConfirmEdit = async () => {
     const response = await dispatch(
-      updateProduct({ id: product.id, editedProduct: editproduct })
+      updateProduct({ id: product.id, updateProduct: editproduct })
     ).unwrap();
 
     if (typeof response === "object") {

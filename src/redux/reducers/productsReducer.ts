@@ -12,7 +12,7 @@ export const getAllProductLength = createAsyncThunk<
   number,
   FilterProductPagination,
   { rejectValue: string }
->("products/getAllProduct", async (obj, { rejectWithValue }) => {
+>("products/getAllProductLength", async (obj, { rejectWithValue }) => {
   try {
     const response = await axios.get(
       `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
