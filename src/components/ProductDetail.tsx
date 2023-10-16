@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
@@ -7,9 +6,10 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import { Product } from "../types/product";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { deleteProduct } from "../redux/reducers/productsReducer";
-import { addToCart } from "../redux/reducers/cartsReducer";
+import { deleteProduct, getSingleProduct } from "../redux/reducers/productsReducer";
+import { addToCart, removeFromCart } from "../redux/reducers/cartsReducer";
 import EditModal from "./EditModal";
+import Wrapper from "./Wrapper";
 
 const ProductDetail = () => {
   const dispatch = useAppDispatch();
@@ -22,25 +22,44 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
-    axios.get(`https://api.escuelajs.co/api/v1/products/${id}`).then((response) => {
-      setProduct(response.data);
-    });
-  });
+    if (id) {
+      dispatch(getSingleProduct(id))
+        .unwrap()
+        .then((response) => {
+          if (typeof response === "object") {
+            setProduct(response);
+          }
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = async (id: number) => {
     if (window.confirm("Do you really want to delete?")) {
-      const response = dispatch(deleteProduct(id)).unwrap();
-
-      if (typeof response === "string") {
-        alert(response);
-      } else {
-        navigate("/");
-      }
+      dispatch(deleteProduct(id))
+        .unwrap()
+        .then((response) => {
+          if (typeof response === "string") {
+            alert(response);
+          } else {
+            setProduct(null);
+            dispatch(removeFromCart(id));
+          }
+        });
     }
   };
 
   if (!product) {
-    return null;
+    return (
+      <Wrapper width="30%">
+        <Box sx={{ minHeight: "300px", fontSize: "30px" }}>
+          The product does not exist
+          <Button variant="contained" onClick={() => navigate("/")}>
+            Return to shop
+          </Button>
+        </Box>
+      </Wrapper>
+    );
   }
 
   return (

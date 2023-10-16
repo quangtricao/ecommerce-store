@@ -56,6 +56,24 @@ export const getAllProductPagination = createAsyncThunk<
   }
 });
 
+export const getSingleProduct = createAsyncThunk<Product, string, { rejectValue: string }>(
+  "products/getSingleProduct",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`https://api.escuelajs.co/api/v1/products/${id}`);
+      return response.data;
+    } catch (err) {
+      const error = err as Error | AxiosError;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return error.message;
+      }
+      // Axios error
+      return error.message;
+    }
+  }
+);
+
 export const updateProduct = createAsyncThunk<Product, UpdateProduct, { rejectValue: string }>(
   "products/updateProduct",
   async ({ id, updateProduct }, { rejectWithValue }) => {
@@ -95,7 +113,7 @@ export const createProduct = createAsyncThunk<Product[], CreateProduct, { reject
   }
 );
 
-export const deleteProduct = createAsyncThunk<string, number, { rejectValue: string }>(
+export const deleteProduct = createAsyncThunk<boolean, number, { rejectValue: string }>(
   "products/deleteProduct",
   async (id, { rejectWithValue }) => {
     try {
@@ -174,6 +192,9 @@ const productsSlice = createSlice({
     builder.addCase(deleteProduct.fulfilled, (state, action) => {});
     builder.addCase(deleteProduct.rejected, (state, action) => {});
     builder.addCase(deleteProduct.pending, (state, action) => {});
+    builder.addCase(getSingleProduct.fulfilled, (state, action) => {});
+    builder.addCase(getSingleProduct.rejected, (state, action) => {});
+    builder.addCase(getSingleProduct.pending, (state, action) => {});
   },
 });
 

@@ -7,7 +7,7 @@ import { getTokenFromLocalStorage } from "../api/token";
 
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { getCategory } from "../redux/reducers/categoriesReducer";
-import { addToCart } from "../redux/reducers/cartsReducer";
+import { addToCart, removeFromCart } from "../redux/reducers/cartsReducer";
 import { addUser, getLoginUserInfo } from "../redux/reducers/userReducer";
 import {
   getAllProductLength,
@@ -94,16 +94,19 @@ const Home = () => {
     setRefetchPageNumber(!refetchPageNumber);
   };
 
-  const handleDeleteProduct = async (id: number) => {
+  const handleDeleteProduct = (id: number) => {
     if (window.confirm("Do you really want to delete?")) {
-      const response = await dispatch(deleteProduct(id)).unwrap();
-
-      if (typeof response === "string") {
-        alert(response);
-      } else {
-        setRefetch(!refetch);
-        setRefetchPageNumber(!refetchPageNumber);
-      }
+      dispatch(deleteProduct(id))
+        .unwrap()
+        .then((response) => {
+          if (typeof response === "string") {
+            alert(response);
+          } else {
+            dispatch(removeFromCart(id));
+            setRefetch(!refetch);
+            setRefetchPageNumber(!refetchPageNumber);
+          }
+        });
     }
   };
 
@@ -115,7 +118,7 @@ const Home = () => {
         setFilterObject={setFilterObject}
         filterObject={filterObject}
       />
-      <Sort refetch={refetch} setRefetch={setRefetch}/>
+      <Sort refetch={refetch} setRefetch={setRefetch} />
       <Grid container alignItems="stretch" spacing={2} columns={{ sm: 1, md: 2, xl: 3 }}>
         {products.map((product: Product) => (
           <ProductPreview product={product} key={product.id}>
