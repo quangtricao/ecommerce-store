@@ -5,12 +5,18 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Wrapper from "../components/Wrapper";
 import ProductPreview from "../components/ProductPreview";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { removeFromCart, increaseQuantity, decreaseQuantity } from "../redux/reducers/cartsReducer";
+import {
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  clearCart,
+} from "../redux/reducers/cartsReducer";
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productsInCart = useAppSelector((state) => state.cartsReducer);
+  console.log(productsInCart);
 
   let sum = 0;
   for (const product of productsInCart) {
@@ -30,6 +36,11 @@ const CartPage: React.FC = () => {
 
   const remove = (id: number) => {
     dispatch(removeFromCart(id));
+  };
+
+  const checkout = () => {
+    alert("Thank you for your order");
+    dispatch(clearCart());
   };
 
   const handleNavigate = (url: string) => {
@@ -55,20 +66,18 @@ const CartPage: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        Total items: {productsInCart.length}
-        <Button variant="contained" sx={{ paddingRight: "10px" }}>
+        <Box sx={{ fontSize: "30px", fontWeight: "bold" }}>Total: ${sum}</Box>
+        <Button variant="contained" sx={{ paddingRight: "10px" }} onClick={checkout}>
           PROCEED TO CHECKOUT
         </Button>
       </Box>
-
-      <Box>Total amount: $ {sum}</Box>
 
       <Grid
         container
         alignItems="stretch"
         spacing={2}
         columns={{ sm: 1, lg: 3 }}
-        sx={{ marginTop: "10px", width: "80%" }}
+        sx={{ marginTop: "20px", width: "100%" }}
       >
         {productsInCart.map((product) => (
           <ProductPreview product={product.productInCart} key={product.productInCart.id}>
