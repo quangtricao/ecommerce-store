@@ -30,6 +30,7 @@ const Home = () => {
 
   const [totalPages, setTotalPages] = useState(0);
   const [refetch, setRefetch] = useState<boolean>(false);
+  const [refetchPageNumber, setRefetchPageNumber] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [filterObject, setFilterObject] = useState<FilterProductPagination>({
     title: "",
@@ -57,6 +58,12 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Refetch products by page
+  useEffect(() => {
+    dispatch(getAllProductPagination({ ...filterObject, offset: page }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetch]);
+
   // Set the number of page
   useEffect(() => {
     dispatch(
@@ -74,29 +81,28 @@ const Home = () => {
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch]);
+  }, [refetchPageNumber]);
 
-  // Refetch products by page
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    dispatch(getAllProductPagination({ ...filterObject, offset: value }));
+    setRefetch(!refetch);
   };
 
-  // After filter, return to page 1
   const submitFilter = () => {
     setPage(1);
     setRefetch(!refetch);
-    dispatch(getAllProductPagination(filterObject));
+    setRefetchPageNumber(!refetchPageNumber);
   };
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = async (id: number) => {
     if (window.confirm("Do you really want to delete?")) {
-      const response = dispatch(deleteProduct(id)).unwrap();
+      const response = await dispatch(deleteProduct(id)).unwrap();
 
       if (typeof response === "string") {
         alert(response);
       } else {
         setRefetch(!refetch);
+        setRefetchPageNumber(!refetchPageNumber);
       }
     }
   };
@@ -109,7 +115,7 @@ const Home = () => {
         setFilterObject={setFilterObject}
         filterObject={filterObject}
       />
-      <Sort />
+      <Sort refetch={refetch} setRefetch={setRefetch}/>
       <Grid container alignItems="stretch" spacing={2} columns={{ sm: 1, md: 2, xl: 3 }}>
         {products.map((product: Product) => (
           <ProductPreview product={product} key={product.id}>

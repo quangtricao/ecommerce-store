@@ -153,9 +153,21 @@ const productsSlice = createSlice({
     builder.addCase(getAllProductLength.fulfilled, (state, action) => {});
     builder.addCase(getAllProductLength.rejected, (state, action) => {});
     builder.addCase(getAllProductLength.pending, (state, action) => {});
-    builder.addCase(updateProduct.fulfilled, (state, action) => {});
-    builder.addCase(updateProduct.rejected, (state, action) => {});
-    builder.addCase(updateProduct.pending, (state, action) => {});
+    builder.addCase(updateProduct.fulfilled, (state, action) => {
+      state.loading = false;
+      state.products = state.products.map((product) =>
+        product.id === action.payload.id ? action.payload : product
+      );
+    });
+    builder.addCase(updateProduct.rejected, (state, action) => {
+      if (action.payload) {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    });
+    builder.addCase(updateProduct.pending, (state, action) => {
+      state.loading = true;
+    });
     builder.addCase(createProduct.fulfilled, (state, action) => {});
     builder.addCase(createProduct.rejected, (state, action) => {});
     builder.addCase(createProduct.pending, (state, action) => {});

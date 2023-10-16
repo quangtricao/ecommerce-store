@@ -5,6 +5,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { updateProduct } from "../redux/reducers/productsReducer";
 import { Product } from "../types/product";
 import { useAppDispatch } from "../redux/hook";
+import { updateCart } from "../redux/reducers/cartsReducer";
 
 const style = {
   position: "absolute" as "absolute",
@@ -48,8 +49,9 @@ const EditModal = ({ product }: ModalProp) => {
     const response = await dispatch(
       updateProduct({ id: product.id, updateProduct: editproduct })
     ).unwrap();
-
+    
     if (typeof response === "object") {
+      dispatch(updateCart(response));
       setOpen(false);
     } else {
       alert(response);
