@@ -4,9 +4,9 @@ import productsReducer from "./reducers/productsReducer";
 import categoriesReducer from "./reducers/categoriesReducer";
 import cartsReducer from "./reducers/cartsReducer";
 import userReducer from "./reducers/userReducer";
-import { ProductInCart } from "../types/Products";
+import { CartState } from "./reducers/cartsReducer";
 
-const preLoadedCartReducer: ProductInCart[] = JSON.parse(
+const preLoadedCartReducer: CartState[] = JSON.parse(
   localStorage.getItem("productInCartLocalStorage") || "[]"
 );
 

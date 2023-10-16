@@ -1,51 +1,47 @@
 import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import {
-  LoginObject,
-  AuthorizedUserObject,
-  CreateUserObject,
-  SuccessUserCreate,
-} from "../../types/User";
-import { TokenObject } from "../../types/Token";
+import { JWTToken, LoginCredential, AuthorizedUser, RegisterUser } from "../../types/user";
 
-const initialState: {
-  authorizedUser: AuthorizedUserObject | null;
-  loading: boolean;
-} = {
-  authorizedUser: null,
-  loading: false,
-};
-
-export const login = createAsyncThunk(
+export const login = createAsyncThunk<JWTToken, LoginCredential, { rejectValue: string }>(
   "user/login",
-  async (obj: LoginObject): Promise<TokenObject | string> => {
+  async (obj, { rejectWithValue }) => {
     try {
       const response = await axios.post("https://api.escuelajs.co/api/v1/auth/login", obj);
       return response.data;
     } catch (err) {
       const error = err as Error | AxiosError;
-      return error.message;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return rejectWithValue(error.message);
+      }
+      // Axios error
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const register = createAsyncThunk(
+export const register = createAsyncThunk<AuthorizedUser, RegisterUser, { rejectValue: string }>(
   "user/register",
-  async (obj: CreateUserObject): Promise<SuccessUserCreate | string> => {
+  async (obj, { rejectWithValue }) => {
     try {
       const response = await axios.post("https://api.escuelajs.co/api/v1/users/", obj);
       return response.data;
     } catch (err) {
       const error = err as Error | AxiosError;
-      return error.message;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return rejectWithValue(error.message);
+      }
+      // Axios error
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const getLoginUserInfo = createAsyncThunk(
+export const getLoginUserInfo = createAsyncThunk<AuthorizedUser, string, { rejectValue: string }>(
   "user/getLoginUserInfo",
-  async (token: string): Promise<AuthorizedUserObject | string> => {
+  async (token, { rejectWithValue }) => {
     try {
       const response = await axios.get("https://api.escuelajs.co/api/v1/auth/profile", {
         headers: {
@@ -55,10 +51,25 @@ export const getLoginUserInfo = createAsyncThunk(
       return response.data;
     } catch (err) {
       const error = err as Error | AxiosError;
-      return error.message;
+      if (!axios.isAxiosError(error)) {
+        // Native error
+        return rejectWithValue(error.message);
+      }
+      // Axios error
+      return rejectWithValue(error.message);
     }
   }
 );
+
+type UserReducerState = {
+  authorizedUser: AuthorizedUser | null;
+  loading: boolean;
+};
+
+const initialState: UserReducerState = {
+  authorizedUser: null,
+  loading: false,
+};
 
 const userSlice = createSlice({
   name: "user",
@@ -70,6 +81,17 @@ const userSlice = createSlice({
     removeUser(state) {
       state.authorizedUser = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state, action) => {});
+    builder.addCase(login.rejected, (state, action) => {});
+    builder.addCase(login.pending, (state, action) => {});
+    builder.addCase(register.fulfilled, (state, action) => {});
+    builder.addCase(register.rejected, (state, action) => {});
+    builder.addCase(register.pending, (state, action) => {});
+    builder.addCase(getLoginUserInfo.fulfilled, (state, action) => {});
+    builder.addCase(getLoginUserInfo.rejected, (state, action) => {});
+    builder.addCase(getLoginUserInfo.pending, (state, action) => {});
   },
 });
 

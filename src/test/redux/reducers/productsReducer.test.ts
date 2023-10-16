@@ -1,6 +1,6 @@
 import { server } from "../../servers/productsServer";
 import { createStore } from "../../../redux/store";
-import { getAllProduct } from "../../../redux/reducers/productsReducer";
+import { getAllProductPagination } from "../../../redux/reducers/productsReducer";
 import { mockProducts } from "../../mockProducts";
 
 let storeForTest = createStore();
@@ -23,12 +23,11 @@ describe("productsReducer asynchronous actions", () => {
     test("filter by title", async () => {
       const response = await storeForTest
         .dispatch(
-          getAllProduct({
+          getAllProductPagination({
             title: "1",
             min: "",
             max: "",
-            id: "",
-            offset: 1,
+            category: "",
           })
         )
         .unwrap();

@@ -25,13 +25,16 @@ export type CreateProduct = {
   categoryId: number;
 };
 
-export interface FilterProduct {
+export type UpdateProduct = {
+  id: number;
+  updateProduct: CreateProduct;
+};
+
+export interface FilterProductPagination {
   title?: string;
   min?: string;
   max?: string;
-  id?: string;
-}
-
-export interface FilterProductPagination extends FilterProduct {
-  offset: number;
+  category?: string;
+  offset?: number;
+  limit?: number;
 }

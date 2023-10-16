@@ -1,6 +1,6 @@
-import { ProductObject } from "../types/Products";
+import { Product } from "../types/product";
 
-export const mockProducts: ProductObject[] = [
+export const mockProducts: Product[] = [
   {
     category: {
       creationAt: "Time 1",

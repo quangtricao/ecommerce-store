@@ -2,88 +2,84 @@ import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import {
-  ProductObject,
-  FilterPagination,
-  FilterObject,
-  EditProduct,
+  Product,
   CreateProduct,
-} from "../../types/Products";
+  UpdateProduct,
+  FilterProductPagination,
+} from "../../types/product";
 
-export const fetchAllByFilter = createAsyncThunk(
-  "products/fetchAllByFilter",
-  async (obj: FilterObject): Promise<ProductObject[] | string> => {
-    try {
-      const response = await axios.get(
-        `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
-          obj.min ? obj.min : ""
-        }&price_max=${obj.max ? obj.max : ""}&categoryId=${obj.id ? obj.id : ""}`
-      );
-      return response.data;
-    } catch (err) {
-      const error = err as Error | AxiosError;
-      if (!axios.isAxiosError(error)) {
-        // Native error
-        return error.message;
-      }
-      // Axios error
-      return error.message;
+export const getAllProductLength = createAsyncThunk<
+  number,
+  FilterProductPagination,
+  { rejectValue: string }
+>("products/getAllProduct", async (obj, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(
+      `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
+        obj.min ? obj.min : ""
+      }&price_max=${obj.max ? obj.max : ""}&categoryId=${obj.category ? obj.category : ""}`
+    );
+    return response.data.length;
+  } catch (err) {
+    const error = err as Error | AxiosError;
+    if (!axios.isAxiosError(error)) {
+      // Native error
+      return rejectWithValue(error.message);
     }
+    // Axios error
+    return rejectWithValue(error.message);
   }
-);
+});
 
-export const getAllProduct = createAsyncThunk(
-  "products/getAllProduct",
-  async (obj: FilterPagination): Promise<ProductObject[] | string> => {
-    try {
-      const response = await axios.get(
-        `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
-          obj.min ? obj.min : ""
-        }&price_max=${obj.max ? obj.max : ""}&categoryId=${obj.id ? obj.id : ""}&offset=${
-          (obj.offset - 1) * 12
-        }&limit=12`
-      );
-      return response.data;
-    } catch (err) {
-      const error = err as Error | AxiosError;
-      if (!axios.isAxiosError(error)) {
-        // Native error
-        return error.message;
-      }
-      // Axios error
-      return error.message;
+export const getAllProductPagination = createAsyncThunk<
+  Product[],
+  FilterProductPagination,
+  { rejectValue: string }
+>("products/getAllProductPagination", async (obj, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(
+      `https://api.escuelajs.co/api/v1/products/?title=${obj.title ? obj.title : ""}&price_min=${
+        obj.min ? obj.min : ""
+      }&price_max=${obj.max ? obj.max : ""}&categoryId=${obj.category ? obj.category : ""}&offset=${
+        obj.offset && obj.limit ? (obj.offset - 1) * obj.limit : ""
+      }&limit=${obj.limit ? obj.limit : ""}`
+    );
+    return response.data;
+  } catch (err) {
+    const error = err as Error | AxiosError;
+    if (!axios.isAxiosError(error)) {
+      // Native error
+      return rejectWithValue(error.message);
     }
+    // Axios error
+    return rejectWithValue(error.message);
   }
-);
+});
 
-type updateProductProps = {
-  id: number;
-  editedProduct: EditProduct;
-};
-
-export const updateProduct = createAsyncThunk(
+export const updateProduct = createAsyncThunk<Product, UpdateProduct, { rejectValue: string }>(
   "products/updateProduct",
-  async ({ id, editedProduct }: updateProductProps): Promise<ProductObject | string> => {
+  async ({ id, updateProduct }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
         `https://api.escuelajs.co/api/v1/products/${id}`,
-        editedProduct
+        updateProduct
       );
       return response.data;
     } catch (err) {
       const error = err as Error | AxiosError;
       if (!axios.isAxiosError(error)) {
         // Native error
-        return error.message;
+        return rejectWithValue(error.message);
       }
       // Axios error
-      return error.message;
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const createProduct = createAsyncThunk(
+export const createProduct = createAsyncThunk<Product[], CreateProduct, { rejectValue: string }>(
   "products/createProduct",
-  async (obj: CreateProduct): Promise<ProductObject[] | string> => {
+  async (obj, { rejectWithValue }) => {
     try {
       const response = await axios.post("https://api.escuelajs.co/api/v1/products/", obj);
       return response.data;
@@ -91,17 +87,17 @@ export const createProduct = createAsyncThunk(
       const error = err as Error | AxiosError;
       if (!axios.isAxiosError(error)) {
         // Native error
-        return error.message;
+        return rejectWithValue(error.message);
       }
       // Axios error
-      return error.message;
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const deleteProduct = createAsyncThunk(
+export const deleteProduct = createAsyncThunk<string, number, { rejectValue: string }>(
   "products/deleteProduct",
-  async (id: number): Promise<string> => {
+  async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(`https://api.escuelajs.co/api/v1/products/${id}`);
       return response.data;
@@ -109,20 +105,23 @@ export const deleteProduct = createAsyncThunk(
       const error = err as Error | AxiosError;
       if (!axios.isAxiosError(error)) {
         // Native error
-        return error.message;
+        return rejectWithValue(error.message);
       }
       // Axios error
-      return error.message;
+      return rejectWithValue(error.message);
     }
   }
 );
 
-const initialState: {
-  products: ProductObject[];
-  error?: string | null;
+type ProductState = {
+  products: Product[];
+  error: string;
   loading: boolean;
-} = {
+};
+
+const initialState: ProductState = {
   products: [],
+  error: "",
   loading: false,
 };
 
@@ -138,30 +137,31 @@ const productsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAllProduct.fulfilled, (state, action) => {
-      if (!(typeof action.payload === "string")) {
-        return {
-          ...state,
-          loading: false,
-          products: action.payload,
-        };
+    builder.addCase(getAllProductPagination.fulfilled, (state, action) => {
+      state.loading = false;
+      state.products = action.payload;
+    });
+    builder.addCase(getAllProductPagination.rejected, (state, action) => {
+      if (action.payload) {
+        state.loading = false;
+        state.error = action.payload;
       }
     });
-    builder.addCase(getAllProduct.rejected, (state, action) => {
-      if (typeof action.payload === "string") {
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-        };
-      }
+    builder.addCase(getAllProductPagination.pending, (state, action) => {
+      state.loading = true;
     });
-    builder.addCase(getAllProduct.pending, (state, action) => {
-      return {
-        ...state,
-        loading: true,
-      };
-    });
+    builder.addCase(getAllProductLength.fulfilled, (state, action) => {});
+    builder.addCase(getAllProductLength.rejected, (state, action) => {});
+    builder.addCase(getAllProductLength.pending, (state, action) => {});
+    builder.addCase(updateProduct.fulfilled, (state, action) => {});
+    builder.addCase(updateProduct.rejected, (state, action) => {});
+    builder.addCase(updateProduct.pending, (state, action) => {});
+    builder.addCase(createProduct.fulfilled, (state, action) => {});
+    builder.addCase(createProduct.rejected, (state, action) => {});
+    builder.addCase(createProduct.pending, (state, action) => {});
+    builder.addCase(deleteProduct.fulfilled, (state, action) => {});
+    builder.addCase(deleteProduct.rejected, (state, action) => {});
+    builder.addCase(deleteProduct.pending, (state, action) => {});
   },
 });
 

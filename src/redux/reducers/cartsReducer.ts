@@ -1,16 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { ProductObject, ProductInCart } from "../../types/Products";
+import { Product } from "../../types/product";
 
-const initialState: ProductInCart[] = [];
+export type CartState = {
+  productInCart: Product;
+  number: number;
+};
+
+const initialState: CartState[] = [];
 
 const cartsSlice = createSlice({
   name: "carts",
   initialState,
   reducers: {
-    addToCart(state, action: PayloadAction<ProductObject>) {
+    addToCart(state, action: PayloadAction<Product>) {
       const foundProduct = state.findIndex((item) => item.productInCart.id === action.payload.id);
-
       if (foundProduct !== -1) {
         state[foundProduct].number += 1;
       } else {

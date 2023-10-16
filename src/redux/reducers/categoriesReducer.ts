@@ -1,11 +1,11 @@
 import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { CategoryObject } from "../../types/Products";
+import { ProductCategory } from "../../types/product";
 
-export const getCategory = createAsyncThunk(
+export const getCategory = createAsyncThunk<ProductCategory[], void, { rejectValue: string }>(
   "categories/getCategory",
-  async (): Promise<CategoryObject[] | string> => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("https://api.escuelajs.co/api/v1/categories");
       return response.data;
@@ -13,20 +13,23 @@ export const getCategory = createAsyncThunk(
       const error = err as Error | AxiosError;
       if (!axios.isAxiosError(error)) {
         // Native error
-        return error.message;
+        return rejectWithValue(error.message);
       }
       // Axios error
-      return error.message;
+      return rejectWithValue(error.message);
     }
   }
 );
 
-const initialState: {
-  categories: CategoryObject[];
-  error?: string | null;
+type CategoryState = {
+  categories: ProductCategory[];
+  error: string;
   loading: boolean;
-} = {
+};
+
+const initialState: CategoryState = {
   categories: [],
+  error: "",
   loading: false,
 };
 
@@ -36,28 +39,17 @@ const categoriesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCategory.fulfilled, (state, action) => {
-      if (!(typeof action.payload === "string")) {
-        return {
-          ...state,
-          loading: false,
-          categories: action.payload,
-        };
-      }
+      state.loading = false;
+      state.categories = action.payload;
     });
     builder.addCase(getCategory.rejected, (state, action) => {
-      if (typeof action.payload === "string") {
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-        };
+      if (action.payload) {
+        state.loading = false;
+        state.error = action.payload;
       }
     });
-    builder.addCase(getCategory.pending, (state, action) => {
-      return {
-        ...state,
-        loading: true,
-      };
+    builder.addCase(getCategory.pending, (state) => {
+      state.loading = true;
     });
   },
 });
