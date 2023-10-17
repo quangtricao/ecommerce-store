@@ -22,7 +22,7 @@ export const handlers = [
       }
     }
 
-    return response(context.status(401));
+    return response(context.status(401), context.json("Unauthorized"));
   }),
 
   // Handle POST requests made to the URL

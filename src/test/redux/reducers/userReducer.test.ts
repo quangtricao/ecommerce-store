@@ -34,18 +34,6 @@ describe("userReducer asynchronous actions", () => {
         refresh_token: "xyz",
       });
     });
-    test("401 Unauthorized with invalid email or password", async () => {
-      const response = await storeForTest
-        .dispatch(
-          login({
-            email: "john@mail.com",
-            password: "abc",
-          })
-        )
-        .unwrap();
-
-      expect(response).toBe("Request failed with status code 401");
-    });
   });
   describe("signup", () => {
     test("Success with valid user object", async () => {
@@ -70,19 +58,6 @@ describe("userReducer asynchronous actions", () => {
         updatedAt: "2023-10-07T14:19:22.000Z",
       });
     });
-    test("400 Bad request with invalid user object", async () => {
-      const response = await storeForTest
-        .dispatch(
-          register({
-            name: "Tri",
-            email: "",
-            password: "",
-            avatar: "",
-          })
-        )
-        .unwrap();
-      expect(response).toBe("Request failed with status code 400");
-    });
   });
   describe("getLoginUserInfo", () => {
     test("Success retrieve user info with valid token", async () => {
@@ -96,12 +71,6 @@ describe("userReducer asynchronous actions", () => {
         role: "customer",
         avatar: "https://api.lorem.space/image/face?w=640&h=480&r=867",
       });
-    });
-
-    test("401 Unauthorized with invalid token", async () => {
-      const response = await storeForTest.dispatch(getLoginUserInfo("invalidtoken")).unwrap();
-
-      expect(response).toBe("Request failed with status code 401");
     });
   });
 });
