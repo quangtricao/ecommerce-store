@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import Wrapper from "../components/Wrapper";
-import { getTokenFromLocalStorage, clearTokenFromLocalStorage } from "../api/token";
+import { getTokenFromLocalStorage, clearTokenFromLocalStorage } from "../api/localStorage";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { getLoginUserInfo, addUser, removeUser } from "../redux/reducers/userReducer";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ const Profile: React.FC = () => {
           }
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = () => {

@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { getTokenFromLocalStorage } from "../api/token";
+import { getTokenFromLocalStorage } from "../api/localStorage";
 
 type ProtectedRouteProp = {
   children: JSX.Element;

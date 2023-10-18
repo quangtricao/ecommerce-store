@@ -1,33 +1,22 @@
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { Badge, Box, Button, Tooltip } from "@mui/material";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import {
+  ShoppingCartOutlined,
+  AccountCircleOutlined,
+  DarkMode,
+  LightMode,
+} from "@mui/icons-material";
 
+import { AppContext } from "../App";
 import { useAppSelector } from "../redux/hook";
-
-const ActiveLink = styled(Button)({
-  fontSize: "20px",
-  fontWeight: "bold",
-  ":hover": {
-    backgroundColor: "white",
-  },
-});
-
-const InactiveLink = styled(Button)({
-  color: "black",
-  fontSize: "20px",
-  fontWeight: "bold",
-  ":hover": {
-    color: "#1769aa",
-    transition: "0.4s",
-    backgroundColor: "white",
-  },
-});
 
 const Header = () => {
   let url = useLocation().pathname;
   const productsInCart = useAppSelector((state) => state.cartsReducer);
+
+  const { theme, setTheme } = useContext(AppContext);
 
   const pages = [
     { name: "Home", link: "/" },
@@ -35,17 +24,36 @@ const Header = () => {
   ];
 
   const settings = [
-    { name: "Profile", link: "/profile", element: <AccountCircleOutlinedIcon /> },
+    { name: "Profile", link: "/profile", element: <AccountCircleOutlined /> },
     {
       name: "Cart",
       link: "/cart",
       element: (
         <Badge badgeContent={productsInCart.length} color="primary">
-          <ShoppingCartOutlinedIcon />
+          <ShoppingCartOutlined />
         </Badge>
       ),
     },
   ];
+
+  const ActiveLink = styled(Button)({
+    fontSize: "20px",
+    fontWeight: "bold",
+    ":hover": {
+      backgroundColor: `${theme ? "white" : "black"}`,
+    },
+  });
+
+  const InactiveLink = styled(Button)({
+    color: `${theme ? "black" : "white"}`,
+    fontSize: "20px",
+    fontWeight: "bold",
+    ":hover": {
+      color: "#1769aa",
+      transition: "0.4s",
+      backgroundColor: `${theme ? "white" : "black"}`,
+    },
+  });
 
   return (
     <Box
@@ -68,6 +76,9 @@ const Header = () => {
         ))}
       </Box>
       <Box>
+        <ActiveLink onClick={() => setTheme(!theme)}>
+          {theme ? <DarkMode /> : <LightMode />}
+        </ActiveLink>
         {settings.map((setting) => (
           <Tooltip title={setting.name} key={setting.name}>
             <Link to={setting.link}>

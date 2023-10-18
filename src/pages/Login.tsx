@@ -4,7 +4,7 @@ import { useAppDispatch } from "../redux/hook";
 import SignInForm from "../components/SignInForm";
 import SignUpFom from "../components/SignUpForm";
 import { addUser, getLoginUserInfo, login, register } from "../redux/reducers/userReducer";
-import { saveTokenToLocalStorage } from "../api/token";
+import { saveTokenToLocalStorage } from "../api/localStorage";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

@@ -1,41 +1,39 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 
+import { AppContext } from "../App";
 import { Product } from "../types/product";
 
 type ProductListPreviewProps = {
   product: Product;
   children?: JSX.Element;
 };
-// scale(1.08)
+
 const ProductPreview = ({ product, children }: ProductListPreviewProps) => {
+  const { theme } = useContext(AppContext);
+
   return (
     <Grid item xs={1}>
       <Card
         sx={{
-          padding: "15px",
-          backgroundColor: "#d7eafa",
+          backgroundColor: `${theme ? "#d7eafa" : "#4d6285"}`,
           borderRadius: "20px",
-
           "&:hover": {
             transition: "0.5s",
             transform: "translateY(-25px)",
           },
         }}
       >
-        <Link to={`/products/${product.id.toString()}`}>
-          <img
-            src={product.images[0]}
-            alt={`${product.title}`}
-            style={{ width: "100%", borderRadius: "20px" }}
-          />
-        </Link>
-
-        <CardContent sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <CardContent>
           <Link to={`/products/${product.id.toString()}`} style={{ textDecoration: "none" }}>
+            <img
+              src={product.images[0]}
+              alt={`${product.title}`}
+              style={{ width: "100%", borderRadius: "20px" }}
+            />
             <Typography
               sx={{
-                color: "#1769aa",
                 fontSize: 18,
                 fontWeight: "bold",
                 ":hover": {
@@ -47,15 +45,25 @@ const ProductPreview = ({ product, children }: ProductListPreviewProps) => {
               {product.title}
             </Typography>
           </Link>
-          <Typography component="div" sx={{ fontSize: 15 }}>
-            Category: {product.category.name}
-          </Typography>
-          <Typography component="div" sx={{ fontSize: 15 }}>
-            {`${product.description.slice(0, 100)} ...`}
-          </Typography>
-          <Typography component="div" sx={{ fontSize: 20, fontWeight: "bold" }}>
-            $ {product.price}
-          </Typography>
+          <Box
+            sx={{
+              paddingTop: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <Typography component="div" sx={{ fontSize: 15 }}>
+              Category: {product.category.name}
+            </Typography>
+            <Typography component="div" sx={{ fontSize: 15 }}>
+              {`${product.description.slice(0, 100)} ...`}
+            </Typography>
+            <Typography component="div" sx={{ fontSize: 20, fontWeight: "bold" }}>
+              $ {product.price}
+            </Typography>
+          </Box>
+
           {children}
         </CardContent>
       </Card>

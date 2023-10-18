@@ -3,7 +3,7 @@ import { Button, Box, Grid, Stack, Pagination } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CheckIcon from "@mui/icons-material/Check";
 
-import { getTokenFromLocalStorage } from "../api/token";
+import { getTokenFromLocalStorage } from "../api/localStorage";
 
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { getCategory } from "../redux/reducers/categoriesReducer";
