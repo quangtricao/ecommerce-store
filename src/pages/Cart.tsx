@@ -16,7 +16,6 @@ const CartPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productsInCart = useAppSelector((state) => state.cartsReducer);
-  console.log(productsInCart);
 
   let sum = 0;
   for (const product of productsInCart) {

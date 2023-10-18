@@ -41,31 +41,26 @@ const SellProduct = () => {
   };
 
   return (
-    <Wrapper width="75%">
+    <Wrapper width="50%">
       <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <h2>Tell us more about what you want to sell</h2>
         <TextField
           required
           label="item"
-          fullWidth
           value={sellProduct.title}
           onChange={(event) => setSellProduct({ ...sellProduct, title: event.target.value })}
-          sx={{ width: "50%" }}
         />
         <TextField
           required
           label="price"
-          fullWidth
           value={sellProduct.price}
           onChange={(event) => setSellProduct({ ...sellProduct, price: event.target.value })}
-          sx={{ width: "50%" }}
         />
         <TextField
           label="Description"
           required
           multiline
           minRows={6}
-          fullWidth
           value={sellProduct.description}
           onChange={(event) => setSellProduct({ ...sellProduct, description: event.target.value })}
         />
@@ -74,8 +69,8 @@ const SellProduct = () => {
           required
           value={sellProduct.images}
           onChange={(event) => setSellProduct({ ...sellProduct, images: event.target.value })}
-          sx={{ width: "50%" }}
         />
+
         <FormControl fullWidth>
           <InputLabel id="category" size="small">
             Category
@@ -84,7 +79,6 @@ const SellProduct = () => {
             label="Category"
             onChange={({ target }) => setSellProduct({ ...sellProduct, categoryId: target.value })}
             value={sellProduct.categoryId}
-            sx={{ width: "50%" }}
           >
             {categories.map((category) => (
               <MenuItem key={category.id} value={category.id}>
