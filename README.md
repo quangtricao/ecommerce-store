@@ -62,7 +62,7 @@ The project has a function-based / horizontal slice architecture.
 
 ### Bonus
 
-- [ ]  Use context API to switch theme.
+- [x]  Use context API to switch theme.
 - [x]  Use pagination when fetching/displaying all the products.
 - [ ]  Implement performance optimization where applicable.
 
