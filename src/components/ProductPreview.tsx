@@ -23,11 +23,13 @@ const ProductPreview = ({ product, children }: ProductListPreviewProps) => {
           },
         }}
       >
-        <img
-          src={product.images[0]}
-          alt={`${product.title}`}
-          style={{ width: "100%", borderRadius: "20px" }}
-        />
+        <Link to={`/products/${product.id.toString()}`}>
+          <img
+            src={product.images[0]}
+            alt={`${product.title}`}
+            style={{ width: "100%", borderRadius: "20px" }}
+          />
+        </Link>
 
         <CardContent sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <Link to={`/products/${product.id.toString()}`} style={{ textDecoration: "none" }}>
