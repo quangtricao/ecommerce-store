@@ -75,6 +75,7 @@ The project has a function-based / horizontal slice architecture.
 │   package-lock.json
 │   package.json
 │   README.md
+│   reducers.png
 │   tsconfig.json
 │
 ├───public
@@ -149,9 +150,8 @@ The project has a function-based / horizontal slice architecture.
     │           userServer.ts
     │
     └───types
-            Products.tsx
-            Token.tsx
-            User.tsx
+            product.ts
+            user.ts
 ```
 
 ## Getting started
