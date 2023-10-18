@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import Carousel from "react-material-ui-carousel";
 import { Box, Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -63,52 +65,58 @@ const ProductDetail = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", gap: "50px" }}>
-      <Box>
-        <img
-          src={product.images[0]}
-          alt="product detail"
-          style={{ height: "400px", borderRadius: "25px" }}
-        />
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <h2>{product.title}</h2>
-          <div>Category: {product.category.name}</div>
-          <div>Price: {product.price}</div>
-          <div>{product.description}</div>
-        </Box>
+    <Box>
+      <Box sx={{ display: "flex", gap: "50px" }}>
+        <Carousel sx={{ height: "600px", width: "600px" }}>
+          {product.images.map((image) => (
+            <img
+              key={image}
+              src={image}
+              alt="product detail"
+              style={{ width: "100%", borderRadius: "25px" }}
+            />
+          ))}
+        </Carousel>
 
-        <Box sx={{ display: "flex", gap: "15px" }}>
-          {idInCart.includes(String(product.id)) ? (
-            <Button size="small" variant="contained" startIcon={<CheckIcon />} disabled>
-              Already in cart
-            </Button>
-          ) : (
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={<AddShoppingCartIcon />}
-              onClick={() => {
-                dispatch(addToCart(product));
-              }}
-            >
-              Add to cart
-            </Button>
-          )}
-          {user?.role === "admin" ? (
-            <Box sx={{ display: "flex", gap: "15px" }}>
-              <EditModal product={product} />
+        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <h2>{product.title}</h2>
+            <div>Category: {product.category.name}</div>
+            <div>Price: {product.price}</div>
+            <div>{product.description}</div>
+          </Box>
+
+          <Box sx={{ display: "flex", gap: "15px" }}>
+            {idInCart.includes(String(product.id)) ? (
+              <Button size="small" variant="contained" startIcon={<CheckIcon />} disabled>
+                Already in cart
+              </Button>
+            ) : (
               <Button
                 size="small"
-                variant="contained"
-                color="error"
-                onClick={() => handleDeleteProduct(Number(id))}
+                variant="outlined"
+                startIcon={<AddShoppingCartIcon />}
+                onClick={() => {
+                  dispatch(addToCart(product));
+                }}
               >
-                Delete
+                Add to cart
               </Button>
-            </Box>
-          ) : null}
+            )}
+            {user?.role === "admin" ? (
+              <Box sx={{ display: "flex", gap: "15px" }}>
+                <EditModal product={product} />
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleDeleteProduct(Number(id))}
+                >
+                  Delete
+                </Button>
+              </Box>
+            ) : null}
+          </Box>
         </Box>
       </Box>
     </Box>
