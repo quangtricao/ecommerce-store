@@ -41,6 +41,8 @@ export const handlers = [
       mockProducts.push(newProduct);
       return response(context.status(200), context.json(newProduct));
     }
+
+    return response(context.status(400));
   }),
 
   // Update products

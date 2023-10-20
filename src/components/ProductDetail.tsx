@@ -20,7 +20,7 @@ const ProductDetail = () => {
   const idInCart = cartsReducer.map((product) => String(product.productInCart.id));
   const user = useAppSelector((state) => state.userReducer.authorizedUser);
 
-  let { id } = useParams();
+  const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {

@@ -66,10 +66,10 @@ export const getSingleProduct = createAsyncThunk<Product, string, { rejectValue:
       const error = err as Error | AxiosError;
       if (!axios.isAxiosError(error)) {
         // Native error
-        return error.message;
+        return rejectWithValue(error.message);
       }
       // Axios error
-      return error.message;
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -168,9 +168,6 @@ const productsSlice = createSlice({
     builder.addCase(getAllProductPagination.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(getAllProductLength.fulfilled, (state, action) => {});
-    builder.addCase(getAllProductLength.rejected, (state, action) => {});
-    builder.addCase(getAllProductLength.pending, (state, action) => {});
     builder.addCase(updateProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.products = state.products.map((product) =>
@@ -186,15 +183,6 @@ const productsSlice = createSlice({
     builder.addCase(updateProduct.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(createProduct.fulfilled, (state, action) => {});
-    builder.addCase(createProduct.rejected, (state, action) => {});
-    builder.addCase(createProduct.pending, (state, action) => {});
-    builder.addCase(deleteProduct.fulfilled, (state, action) => {});
-    builder.addCase(deleteProduct.rejected, (state, action) => {});
-    builder.addCase(deleteProduct.pending, (state, action) => {});
-    builder.addCase(getSingleProduct.fulfilled, (state, action) => {});
-    builder.addCase(getSingleProduct.rejected, (state, action) => {});
-    builder.addCase(getSingleProduct.pending, (state, action) => {});
   },
 });
 
