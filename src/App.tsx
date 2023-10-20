@@ -21,7 +21,6 @@ const App = () => {
 
   useEffect(() => {
     let themeInLocalStorage = getThemeFromLocalStorage();
-    console.log(themeInLocalStorage);
 
     if (themeInLocalStorage && themeInLocalStorage === "dark") {
       setTheme(false);
